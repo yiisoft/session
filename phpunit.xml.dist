@@ -10,13 +10,14 @@
          convertWarningsToExceptions="true"
          stopOnFailure="false"
          executionOrder="random"
-         resolveDependencies="true">
+         resolveDependencies="true"
+         printerClass="Yiisoft\Session\Tests\ResultPrinter">
     <php>
         <ini name="error_reporting" value="-1"/>
     </php>
 
     <testsuites>
-        <testsuite name="Yii _____ tests">
+        <testsuite name="Yii Session tests">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
