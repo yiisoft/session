@@ -64,12 +64,16 @@ final class SessionMiddleware implements MiddlewareInterface
                 throw new SessionException('"cookie_secure" is on but connection is not secure. Either set Session "cookie_secure" option to "0" or make connection secure.');
             }
 
-            $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId))
+            $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId ?? ''))
                 ->withPath($cookieParameters['path'])
                 ->withDomain($cookieDomain)
                 ->withHttpOnly($cookieParameters['httponly'])
                 ->withSecure($useSecureCookie)
                 ->withSameSite($cookieParameters['samesite'] ?? Cookie::SAME_SITE_LAX);
+
+            if ($currentSessionId === null) {
+                $sessionCookie->expire();
+            }
 
             if ($cookieParameters['lifetime'] > 0) {
                 $sessionCookie = $sessionCookie->withMaxAge(new \DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
