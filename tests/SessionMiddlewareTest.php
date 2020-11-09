@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Tests;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -32,22 +32,22 @@ final class SessionMiddlewareTest extends TestCase
     private const SESSION_NAME = 'exampleSessionName';
 
     /**
-     * @var RequestHandlerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var RequestHandlerInterface|MockObject
      */
     private $requestHandlerMock;
 
     /**
-     * @var SessionInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var SessionInterface|MockObject
      */
     private $sessionMock;
 
     /**
-     * @var ServerRequestInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ServerRequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var UriInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var UriInterface|MockObject
      */
     private $uriMock;
 

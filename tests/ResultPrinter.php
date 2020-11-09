@@ -8,7 +8,7 @@ use PHPUnit\TextUI\DefaultResultPrinter;
 
 /**
  * Class ResultPrinter overrides \PHPUnit\TextUI\ResultPrinter constructor
- * to change default output to STDOUT and prevent some tests from fail when
+ * to change default output to STDOUT and prevent some tests from failing when
  * they can not be executed after headers have been sent.
  */
 final class ResultPrinter extends DefaultResultPrinter
