@@ -52,6 +52,7 @@ final class SessionMiddleware implements MiddlewareInterface
 
         // SID changed, need to send new cookie.
         if ($this->getSessionIdFromRequest($request) !== $currentSessionId) {
+            /** @psalm-var array{lifetime: int, path: string, domain: string, secure: bool, httponly: bool, samesite: string} */
             $cookieParameters = $this->session->getCookieParameters();
 
             $cookieDomain = $cookieParameters['domain'];
@@ -87,6 +88,7 @@ final class SessionMiddleware implements MiddlewareInterface
 
     private function getSessionIdFromRequest(ServerRequestInterface $request): ?string
     {
+        /** @psalm-var array<string, string> $cookies */
         $cookies = $request->getCookieParams();
         return $cookies[$this->session->getName()] ?? null;
     }
