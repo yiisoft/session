@@ -151,7 +151,7 @@ final class SessionMiddlewareTest extends TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getID')
-            ->willReturn($sessionId);
+            ->willReturn($isActive ? $sessionId: null);
 
         $cookieParams = self::COOKIE_PARAMETERS;
         if (!$cookieDomainProvided) {
