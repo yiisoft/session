@@ -72,10 +72,6 @@ final class SessionMiddleware implements MiddlewareInterface
                 ->withSecure($useSecureCookie)
                 ->withSameSite($cookieParameters['samesite'] ?? Cookie::SAME_SITE_LAX);
 
-            if ($currentSessionId === null) {
-                $sessionCookie->expire();
-            }
-
             if ($cookieParameters['lifetime'] > 0) {
                 $sessionCookie = $sessionCookie->withMaxAge(new \DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
             }
