@@ -50,36 +50,36 @@ final class SessionMiddleware implements MiddlewareInterface
 
         $currentSessionId = $this->session->getID();
 
-        // SID changed, need to send new cookie.
-        if ($this->getSessionIdFromRequest($request) !== $currentSessionId) {
-            /** @psalm-var array{lifetime: int, path: string, domain: string, secure: bool, httponly: bool, samesite: string} */
-            $cookieParameters = $this->session->getCookieParameters();
-
-            $cookieDomain = $cookieParameters['domain'];
-            if (empty($cookieDomain)) {
-                $cookieDomain = $request->getUri()->getHost();
-            }
-
-            $useSecureCookie = $cookieParameters['secure'];
-            if ($useSecureCookie && $request->getUri()->getScheme() !== 'https') {
-                throw new SessionException('"cookie_secure" is on but connection is not secure. Either set Session "cookie_secure" option to "0" or make connection secure.');
-            }
-
-            $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId ?? ''))
-                ->withPath($cookieParameters['path'])
-                ->withDomain($cookieDomain)
-                ->withHttpOnly($cookieParameters['httponly'])
-                ->withSecure($useSecureCookie)
-                ->withSameSite($cookieParameters['samesite'] ?? Cookie::SAME_SITE_LAX);
-
-            if ($cookieParameters['lifetime'] > 0) {
-                $sessionCookie = $sessionCookie->withMaxAge(new \DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
-            }
-
-            return $sessionCookie->addToResponse($response);
+        if ($this->getSessionIdFromRequest($request) === $currentSessionId) {
+            // SID not changed, no need to send new cookie.
+            return $response;
         }
 
-        return $response;
+        /** @psalm-var array{lifetime: int, path: string, domain: string, secure: bool, httponly: bool, samesite: string} */
+        $cookieParameters = $this->session->getCookieParameters();
+
+        $cookieDomain = $cookieParameters['domain'];
+        if (empty($cookieDomain)) {
+            $cookieDomain = $request->getUri()->getHost();
+        }
+
+        $useSecureCookie = $cookieParameters['secure'];
+        if ($useSecureCookie && $request->getUri()->getScheme() !== 'https') {
+            throw new SessionException('"cookie_secure" is on but connection is not secure. Either set Session "cookie_secure" option to "0" or make connection secure.');
+        }
+
+        $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId ?? ''))
+            ->withPath($cookieParameters['path'])
+            ->withDomain($cookieDomain)
+            ->withHttpOnly($cookieParameters['httponly'])
+            ->withSecure($useSecureCookie)
+            ->withSameSite($cookieParameters['samesite'] ?? Cookie::SAME_SITE_LAX);
+
+        if ($cookieParameters['lifetime'] > 0) {
+            $sessionCookie = $sessionCookie->withMaxAge(new \DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
+        }
+
+        return $sessionCookie->addToResponse($response);
     }
 
     private function getSessionIdFromRequest(ServerRequestInterface $request): ?string
