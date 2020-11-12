@@ -18,7 +18,7 @@ final class FlashTest extends TestCase
 
     private function getSession(array $contents = []): SessionInterface
     {
-        return new MockArraySessionStorage([]);
+        return new MockArraySessionStorage($contents);
     }
 
     protected function setUp(): void
@@ -34,6 +34,53 @@ final class FlashTest extends TestCase
                 'error' => 'Some error message to show',
             ],
         ]);
+    }
+
+    public function testCleanupFromPreviousRequest(): void
+    {
+        $session = $this->getSession([
+            '__flash' => [
+                '__counters' => [
+                    'info' => 1,
+                ],
+                'info' => 'Some message to show',
+            ],
+        ]);
+        $flash = new Flash($session);
+
+        $flash->getAll();
+
+        $rawFlashes = $session->get('__flash');
+        $this->assertArrayNotHasKey('info', $rawFlashes);
+        $this->assertArrayNotHasKey('info', $rawFlashes['__counters']);
+    }
+
+    public function testSpoiledFlashesSessionValue(): void
+    {
+        $session = $this->getSession([
+            '__flash' => 42,
+        ]);
+        $flash = new Flash($session);
+
+        $flash->getAll();
+
+        $rawFlashes = $session->get('__flash');
+        $this->assertSame(['__counters' => []], $rawFlashes);
+    }
+
+    public function testSpoiledCountersSessionValue(): void
+    {
+        $session = $this->getSession([
+            '__flash' => [
+                '__counters' => 42,
+            ],
+        ]);
+        $flash = new Flash($session);
+
+        $flash->getAll();
+
+        $rawFlashes = $session->get('__flash');
+        $this->assertSame(['__counters' => []], $rawFlashes);
     }
 
     public function testRemove(): void
