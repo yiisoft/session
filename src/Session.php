@@ -30,9 +30,11 @@ final class Session implements SessionInterface
      */
     public function __construct(array $options = [], \SessionHandlerInterface $handler = null)
     {
-        if ($handler !== null) {
-            session_set_save_handler($handler);
+        if ($handler === null) {
+            $handler = new \SessionHandler();
         }
+
+        session_set_save_handler($handler, true);
 
         $defaultOptions = self::DEFAULT_OPTIONS;
         $this->options = array_merge($defaultOptions, $options);
