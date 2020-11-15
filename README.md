@@ -14,7 +14,8 @@
 [![static analysis](https://github.com/yiisoft/session/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/session/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/session/coverage.svg)](https://shepherd.dev/github/yiisoft/session)
 
-The package ...
+The package implements a session service, [PSR-15](https://www.php-fig.org/psr/psr-15/) session middleware,
+and a flash message service which helps use one-time messages.
 
 ## Installation
 
@@ -24,7 +25,46 @@ The package could be installed with composer:
 composer install yiisoft/session
 ```
 
+In order to maintain a session between requests you need to add `SessionMiddleware` to your main middleware stack.
+In Yii it is done by configuring `MiddlewareDispatcher`:
+
+```php
+return [
+    MiddlewareDispatcher::class => static fn (ContainerInterface $container) => (new MiddlewareDispatcher($container))
+        ->addMiddleware($container->get(Router::class))
+        ->addMiddleware($container->get(SessionMiddleware::class)) // <-- here
+        ->addMiddleware($container->get(CsrfMiddleware::class))
+        ->addMiddleware($container->get(ErrorCatcher::class)),
+];
+```
+
 ## General usage
+
+You can access session data through `SessionInterface`.
+
+```php
+/** @var \Yiisoft\Session\SessionInterface $session */
+$myId = $session->get('my_id');
+if ($myId === null) {
+    $session->set('my_id', 42);
+}
+```
+
+In case you need some data to remain in session until read, such as in case with displaying a message on the next page,
+`FlashInteface` is your friend:
+
+```php
+/** @var Yiisoft\Session\Flash\FlashInterface $flash */
+
+// request 1
+$flash->set('warning', 'Oh no, not again.');
+
+// request 2
+$warning = $flash->get('warning');
+if ($warning !== null) {
+    // do something with it
+}
+```
 
 ## Unit testing
 
