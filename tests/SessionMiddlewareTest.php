@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Tests;
 
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriInterface;
@@ -32,22 +32,22 @@ final class SessionMiddlewareTest extends TestCase
     private const SESSION_NAME = 'exampleSessionName';
 
     /**
-     * @var RequestHandlerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var RequestHandlerInterface|MockObject
      */
     private $requestHandlerMock;
 
     /**
-     * @var SessionInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var SessionInterface|MockObject
      */
     private $sessionMock;
 
     /**
-     * @var ServerRequestInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ServerRequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var UriInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var UriInterface|MockObject
      */
     private $uriMock;
 
@@ -116,6 +116,18 @@ final class SessionMiddlewareTest extends TestCase
         $this->assertEquals($response, $result);
     }
 
+    public function testProcessDoesNotAlterResponseWhenSessionIdIsTheSame(): void
+    {
+        $this->setUpSessionMock(true, true, 'session_id');
+        $this->setUpRequestMock(true, 'session_id');
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+        $this->assertEquals($response, $result);
+    }
+
     private function setUpRequestHandlerMock(ResponseInterface $response): void
     {
         $this->requestHandlerMock
@@ -124,7 +136,7 @@ final class SessionMiddlewareTest extends TestCase
             ->willReturn($response);
     }
 
-    private function setUpSessionMock(bool $cookieDomainProvided = true, bool $isActive = true): void
+    private function setUpSessionMock(bool $cookieDomainProvided = true, bool $isActive = true, string $sessionId = self::CURRENT_SID): void
     {
         $this->sessionMock
             ->expects($this->any())
@@ -139,7 +151,7 @@ final class SessionMiddlewareTest extends TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getID')
-            ->willReturn(self::CURRENT_SID);
+            ->willReturn($isActive ? $sessionId: null);
 
         $cookieParams = self::COOKIE_PARAMETERS;
         if (!$cookieDomainProvided) {
@@ -152,7 +164,7 @@ final class SessionMiddlewareTest extends TestCase
             ->willReturn($cookieParams);
     }
 
-    private function setUpRequestMock(bool $isConnectionSecure = true): void
+    private function setUpRequestMock(bool $isConnectionSecure = true, string $sessionId = self::REQUEST_SID): void
     {
         $uriScheme = $isConnectionSecure ? 'https' : 'http';
         $this->setUpUriMock($uriScheme);
@@ -163,7 +175,7 @@ final class SessionMiddlewareTest extends TestCase
             ->willReturn($this->uriMock);
 
         $requestCookieParams = [
-            self::SESSION_NAME => self::REQUEST_SID,
+            self::SESSION_NAME => $sessionId,
         ];
         $this->requestMock
             ->expects($this->any())

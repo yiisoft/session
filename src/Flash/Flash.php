@@ -6,15 +6,17 @@ namespace Yiisoft\Session\Flash;
 
 use Yiisoft\Session\SessionInterface;
 
+/**
+ * Session-based implementation of flash messages, a special type of data, that is available only in the current request
+ * and the next request. After that, it will be deleted automatically. Flash messages are particularly
+ * useful for displaying confirmation messages.
+ */
 final class Flash implements FlashInterface
 {
-
     private const COUNTERS = '__counters';
-
     private const FLASH_PARAM = '__flash';
 
     private ?string $sessionId = null;
-
     private SessionInterface $session;
 
     public function __construct(SessionInterface $session)
@@ -31,7 +33,7 @@ final class Flash implements FlashInterface
         }
 
         if ($flashes[self::COUNTERS][$key] < 0) {
-            // mark for deletion in the next request
+            // Mark for deletion in the next request.
             $flashes[self::COUNTERS][$key] = 1;
             $this->save($flashes);
         }
@@ -51,7 +53,7 @@ final class Flash implements FlashInterface
 
             $list[$key] = $value;
             if ($flashes[self::COUNTERS][$key] < 0) {
-                // mark for deletion in the next request
+                // Mark for deletion in the next request.
                 $flashes[self::COUNTERS][$key] = 1;
             }
         }
@@ -135,7 +137,7 @@ final class Flash implements FlashInterface
 
     private function fetch(): array
     {
-        // ensure session is active (and has id)
+        // Ensure session is active (and has id).
         $this->session->open();
         if ($this->sessionId !== $this->session->getId()) {
             $this->sessionId = $this->session->getId();

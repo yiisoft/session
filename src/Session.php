@@ -9,7 +9,6 @@ namespace Yiisoft\Session;
  */
 final class Session implements SessionInterface
 {
-
     private const DEFAULT_OPTIONS = [
         'use_cookies' => 1,
         'cookie_secure' => 1,
@@ -25,11 +24,17 @@ final class Session implements SessionInterface
     private ?string $sessionId = null;
     private array $options;
 
+    /**
+     * @param array $options Session options. See {@link https://www.php.net/manual/en/session.configuration.php}.
+     * @param \SessionHandlerInterface|null $handler Session handler. If not specified, default PHP handler is used.
+     */
     public function __construct(array $options = [], \SessionHandlerInterface $handler = null)
     {
-        if ($handler !== null) {
-            session_set_save_handler($handler);
+        if ($handler === null) {
+            $handler = new \SessionHandler();
         }
+
+        session_set_save_handler($handler, true);
 
         $defaultOptions = self::DEFAULT_OPTIONS;
         $this->options = array_merge($defaultOptions, $options);
@@ -53,7 +58,7 @@ final class Session implements SessionInterface
             try {
                 session_write_close();
             } catch (\Throwable $e) {
-                throw new SessionException('Unable to close session', $e->getCode(), $e);
+                throw new SessionException('Unable to close session.', (int)$e->getCode(), $e);
             }
         }
     }
@@ -72,7 +77,7 @@ final class Session implements SessionInterface
             session_start($this->options);
             $this->sessionId = session_id();
         } catch (\Throwable $e) {
-            throw new SessionException('Failed to start session', $e->getCode(), $e);
+            throw new SessionException('Failed to start session.', (int)$e->getCode(), $e);
         }
     }
 
@@ -94,7 +99,7 @@ final class Session implements SessionInterface
                     $this->sessionId = session_id();
                 }
             } catch (\Throwable $e) {
-                throw new SessionException('Failed to regenerate ID', $e->getCode(), $e);
+                throw new SessionException('Failed to regenerate ID.', (int)$e->getCode(), $e);
             }
         }
     }

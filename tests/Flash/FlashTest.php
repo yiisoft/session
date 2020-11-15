@@ -6,14 +6,20 @@ namespace Yiisoft\Session\Tests\Flash;
 
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Session\Flash\Flash;
+use Yiisoft\Session\SessionInterface;
 
 final class FlashTest extends TestCase
 {
 
     /**
-     * @var MockArraySessionStorage
+     * @var MockArraySessionStorage|SessionInterface
      */
-    private $session;
+    private SessionInterface $session;
+
+    private function getSession(array $contents = []): SessionInterface
+    {
+        return new MockArraySessionStorage($contents);
+    }
 
     protected function setUp(): void
     {
@@ -30,6 +36,53 @@ final class FlashTest extends TestCase
         ]);
     }
 
+    public function testCleanupFromPreviousRequest(): void
+    {
+        $session = $this->getSession([
+            '__flash' => [
+                '__counters' => [
+                    'info' => 1,
+                ],
+                'info' => 'Some message to show',
+            ],
+        ]);
+        $flash = new Flash($session);
+
+        $flash->getAll();
+
+        $rawFlashes = $session->get('__flash');
+        $this->assertArrayNotHasKey('info', $rawFlashes);
+        $this->assertArrayNotHasKey('info', $rawFlashes['__counters']);
+    }
+
+    public function testSpoiledFlashesSessionValue(): void
+    {
+        $session = $this->getSession([
+            '__flash' => 42,
+        ]);
+        $flash = new Flash($session);
+
+        $flash->getAll();
+
+        $rawFlashes = $session->get('__flash');
+        $this->assertSame(['__counters' => []], $rawFlashes);
+    }
+
+    public function testSpoiledCountersSessionValue(): void
+    {
+        $session = $this->getSession([
+            '__flash' => [
+                '__counters' => 42,
+            ],
+        ]);
+        $flash = new Flash($session);
+
+        $flash->getAll();
+
+        $rawFlashes = $session->get('__flash');
+        $this->assertSame(['__counters' => []], $rawFlashes);
+    }
+
     public function testRemove(): void
     {
         $flash = new Flash($this->session);
@@ -41,11 +94,12 @@ final class FlashTest extends TestCase
 
     public function testRemoveAll(): void
     {
-        $flash = new Flash($this->session);
+        $session = $this->getSession();
+        $flash = new Flash($session);
 
         $flash->removeAll();
 
-        $rawFlashes = $this->session->get('__flash');
+        $rawFlashes = $session->get('__flash');
         $this->assertSame(['__counters' => []], $rawFlashes);
     }
 
@@ -92,19 +146,20 @@ final class FlashTest extends TestCase
     {
         $flash = new Flash($this->session);
 
-        $flash->add('info', 'One another message', false);
+        $flash->add('info', 'test');
+        $flash->add('new', '1');
+        $flash->add('new', '2');
 
         $rawFlashes = $this->session->get('__flash');
         $this->assertSame([
             '__counters' => [
-                'info' => 0,
+                'info' => -1,
                 'error' => 1,
+                'new' => -1,
             ],
-            'info' => [
-                'Some message to show',
-                'One another message',
-            ],
+            'info' => ['Some message to show', 'test'],
             'error' => 'Some error message to show',
+            'new' => ['1', '2'],
         ], $rawFlashes);
     }
 
@@ -120,6 +175,50 @@ final class FlashTest extends TestCase
                 'info' => 1,
                 'error' => 1,
                 'warn' => -1,
+            ],
+            'info' => 'Some message to show',
+            'error' => 'Some error message to show',
+            'warn' => 'Warning message',
+        ], $rawFlashes);
+    }
+
+    public function testRemoveAfterAccessWithGet(): void
+    {
+        $flash = new Flash($this->session);
+
+        $flash->set('warn', 'Warning message');
+
+        // will mark "warn" as to be deleted in the next request
+        $flash->get('warn');
+
+        $rawFlashes = $this->session->get('__flash');
+        $this->assertSame([
+            '__counters' => [
+                'info' => 1,
+                'error' => 1,
+                'warn' => 1,
+            ],
+            'info' => 'Some message to show',
+            'error' => 'Some error message to show',
+            'warn' => 'Warning message',
+        ], $rawFlashes);
+    }
+
+    public function testRemoveAfterAccessWithAll(): void
+    {
+        $flash = new Flash($this->session);
+
+        $flash->set('warn', 'Warning message');
+
+        // will mark all flashes as to be deleted in the next request
+        $flash->getAll();
+
+        $rawFlashes = $this->session->get('__flash');
+        $this->assertSame([
+            '__counters' => [
+                'info' => 1,
+                'error' => 1,
+                'warn' => 1,
             ],
             'info' => 'Some message to show',
             'error' => 'Some error message to show',
