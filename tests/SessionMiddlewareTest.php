@@ -17,7 +17,6 @@ use Yiisoft\Session\SessionMiddleware;
 
 final class SessionMiddlewareTest extends TestCase
 {
-
     private const COOKIE_PARAMETERS = [
         'path' => 'examplePath',
         'domain' => 'exampleDomain',
@@ -32,22 +31,22 @@ final class SessionMiddlewareTest extends TestCase
     private const SESSION_NAME = 'exampleSessionName';
 
     /**
-     * @var RequestHandlerInterface|MockObject
+     * @var MockObject|RequestHandlerInterface
      */
     private $requestHandlerMock;
 
     /**
-     * @var SessionInterface|MockObject
+     * @var MockObject|SessionInterface
      */
     private $sessionMock;
 
     /**
-     * @var ServerRequestInterface|MockObject
+     * @var MockObject|ServerRequestInterface
      */
     private $requestMock;
 
     /**
-     * @var UriInterface|MockObject
+     * @var MockObject|UriInterface
      */
     private $uriMock;
 
@@ -151,7 +150,7 @@ final class SessionMiddlewareTest extends TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getID')
-            ->willReturn($isActive ? $sessionId: null);
+            ->willReturn($isActive ? $sessionId : null);
 
         $cookieParams = self::COOKIE_PARAMETERS;
         if (!$cookieDomainProvided) {

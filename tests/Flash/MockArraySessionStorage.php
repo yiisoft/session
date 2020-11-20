@@ -8,7 +8,6 @@ use Yiisoft\Session\SessionInterface;
 
 final class MockArraySessionStorage implements SessionInterface
 {
-
     private $id = '';
 
     private $name = '';
@@ -126,4 +125,3 @@ final class MockArraySessionStorage implements SessionInterface
         return hash('sha256', uniqid('ss_mock_', true));
     }
 }
-

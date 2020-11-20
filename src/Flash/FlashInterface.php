@@ -11,11 +11,11 @@ namespace Yiisoft\Session\Flash;
  */
 interface FlashInterface
 {
-
     /**
      * Returns a flash message.
      *
      * @param string $key The key identifying the flash message.
+     *
      * @return mixed The flash message or an array of messages if {@see add()} was used.
      */
     public function get(string $key);
@@ -72,6 +72,7 @@ interface FlashInterface
      * Returns a value indicating whether there are flash messages associated with the specified key.
      *
      * @param string $key Key identifying the flash message type.
+     *
      * @return bool Whether any flash messages exist under specified key.
      */
     public function has(string $key): bool;

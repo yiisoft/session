@@ -14,6 +14,7 @@ interface SessionInterface
      *
      * @param string $key Key to read value from.
      * @param mixed $default Default value in case there is no value with the key specified. Null by default.
+     *
      * @return mixed
      */
     public function get(string $key, $default = null);
@@ -82,6 +83,7 @@ interface SessionInterface
      * Check if session has a value with a given key.
      *
      * @param string $key The key to check.
+     *
      * @return bool
      */
     public function has(string $key): bool;
@@ -90,6 +92,7 @@ interface SessionInterface
      * Read value and remove it afterwards.
      *
      * @param string $key The key to pull value from.
+     *
      * @return mixed The value.
      */
     public function pull(string $key);

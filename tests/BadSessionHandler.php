@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Yiisoft\Session\Tests;
-
 
 final class BadSessionHandler implements \SessionHandlerInterface
 {

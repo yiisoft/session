@@ -10,7 +10,6 @@ use Yiisoft\Session\SessionInterface;
 
 final class FlashTest extends TestCase
 {
-
     /**
      * @var MockArraySessionStorage|SessionInterface
      */

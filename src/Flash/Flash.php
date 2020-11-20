@@ -105,7 +105,6 @@ final class Flash implements FlashInterface
         return isset($flashes[$key], $flashes[self::COUNTERS][$key]);
     }
 
-
     /**
      * Updates the counters for flash messages and removes outdated flash messages.
      * This method should be called once after session initialization.

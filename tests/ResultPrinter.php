@@ -13,7 +13,6 @@ use PHPUnit\TextUI\DefaultResultPrinter;
  */
 final class ResultPrinter extends DefaultResultPrinter
 {
-
     private bool $isStdout;
 
     public function __construct(
