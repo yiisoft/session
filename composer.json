@@ -22,7 +22,7 @@
         "psr/http-message-implementation": "1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
-        "yiisoft/cookies": "^3.0@dev"
+        "yiisoft/cookies": "^1.0"
     },
     "require-dev": {
         "nyholm/psr7": "^1.3",
