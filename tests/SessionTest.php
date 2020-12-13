@@ -12,6 +12,16 @@ final class SessionTest extends TestCase
 {
     private ?Session $session = null;
 
+    protected function tearDown(): void
+    {
+        if ($this->session !== null) {
+            $this->session->destroy();
+        }
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
     public function getSession(array $options = [], \SessionHandlerInterface $handler = null): Session
     {
         if ($this->session === null) {
@@ -21,13 +31,9 @@ final class SessionTest extends TestCase
         return $this->session;
     }
 
-    protected function tearDown(): void
-    {
-        if ($this->session !== null) {
-            $this->session->destroy();
-        }
-    }
-
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetAndSet(): void
     {
         $session = $this->getSession();
@@ -35,6 +41,9 @@ final class SessionTest extends TestCase
         self::assertEquals('value', $session->get('key_get'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testHas(): void
     {
         $session = $this->getSession();
@@ -42,6 +51,9 @@ final class SessionTest extends TestCase
         self::assertTrue($session->has('key_has'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testClose(): void
     {
         $session = $this->getSession();
@@ -52,6 +64,9 @@ final class SessionTest extends TestCase
         $session->open();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testRegenerateID(): void
     {
         $session = $this->getSession();
@@ -61,6 +76,9 @@ final class SessionTest extends TestCase
         self::assertNotEquals($id, $session->getId());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testDiscard(): void
     {
         $session = $this->getSession();
@@ -69,12 +87,18 @@ final class SessionTest extends TestCase
         self::assertEmpty($session->get('key_discard'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetName(): void
     {
         $session = $this->getSession();
         self::assertEquals($session->getName(), session_name());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testPull(): void
     {
         $session = $this->getSession();
@@ -83,6 +107,9 @@ final class SessionTest extends TestCase
         self::assertEmpty($session->get('key_pull'));
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testAll(): void
     {
         $session = $this->getSession();
@@ -91,6 +118,9 @@ final class SessionTest extends TestCase
         self::assertEquals(['key_1' => 1, 'key_2' => 2], $session->all());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testClear(): void
     {
         $session = $this->getSession();
@@ -99,6 +129,9 @@ final class SessionTest extends TestCase
         self::assertEmpty($session->all());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testSetId(): void
     {
         $session = $this->getSession();
@@ -107,12 +140,18 @@ final class SessionTest extends TestCase
         self::assertEquals(session_id(), $session->getId());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetCookieParameters(): void
     {
         $session = $this->getSession();
         self::assertEquals(session_get_cookie_params(), $session->getCookieParameters());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testCustomHandler(): void
     {
         $handler = new SpySessionHandler();
@@ -123,6 +162,9 @@ final class SessionTest extends TestCase
         $this->assertSame(['open' => 1, 'read' => 1, 'write' => 1, 'close' => 1], $handler->getCalls());
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testFailOpen(): void
     {
         $handler = new BadSessionHandler(['open']);
@@ -132,6 +174,9 @@ final class SessionTest extends TestCase
         $session->open();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testFailWrite(): void
     {
         $handler = new BadSessionHandler(['write']);
@@ -142,6 +187,9 @@ final class SessionTest extends TestCase
         $session->close();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testFailRegenerateId(): void
     {
         $handler = new BadSessionHandler(['destroy']);
