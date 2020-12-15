@@ -10,8 +10,7 @@
          convertWarningsToExceptions="true"
          stopOnFailure="false"
          executionOrder="random"
-         resolveDependencies="true"
-         printerClass="Yiisoft\Session\Tests\ResultPrinter">
+         resolveDependencies="true">
     <php>
         <ini name="error_reporting" value="-1"/>
     </php>

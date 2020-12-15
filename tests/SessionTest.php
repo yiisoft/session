@@ -8,9 +8,19 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Session\Session;
 use Yiisoft\Session\SessionException;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 final class SessionTest extends TestCase
 {
     private ?Session $session = null;
+
+    protected function tearDown(): void
+    {
+        if ($this->session !== null) {
+            $this->session->destroy();
+        }
+    }
 
     public function getSession(array $options = [], \SessionHandlerInterface $handler = null): Session
     {
@@ -19,13 +29,6 @@ final class SessionTest extends TestCase
         }
 
         return $this->session;
-    }
-
-    protected function tearDown(): void
-    {
-        if ($this->session !== null) {
-            $this->session->destroy();
-        }
     }
 
     public function testGetAndSet(): void
