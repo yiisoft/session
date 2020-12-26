@@ -32,11 +32,9 @@ final class Session implements SessionInterface
      */
     public function __construct(array $options = [], SessionHandlerInterface $handler = null)
     {
-        if ($handler === null) {
-            $handler = new SessionHandler();
+        if ($handler !== null) {
+            session_set_save_handler($handler, true);
         }
-
-        session_set_save_handler($handler, true);
 
         // We set cookies using SessionMiddleware
         $options['use_cookies'] = 0;
