@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session;
 
-use SessionHandler;
 use SessionHandlerInterface;
 use Throwable;
 
