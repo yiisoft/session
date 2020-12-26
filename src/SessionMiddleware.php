@@ -47,8 +47,10 @@ final class SessionMiddleware implements MiddlewareInterface
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @return ResponseInterface
+     *
      * @throws \Exception
+     *
+     * @return ResponseInterface
      */
     private function commitSession(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
