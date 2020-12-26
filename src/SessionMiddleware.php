@@ -42,6 +42,14 @@ final class SessionMiddleware implements MiddlewareInterface
         return $this->commitSession($request, $response);
     }
 
+    /**
+     * Close session and add/modify response session cookie if necessary.
+     *
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Exception
+     */
     private function commitSession(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         if (!$this->session->isActive()) {

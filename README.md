@@ -27,15 +27,25 @@ composer install yiisoft/session
 ```
 
 In order to maintain a session between requests you need to add `SessionMiddleware` to your main middleware stack.
-In Yii it is done by configuring `MiddlewareDispatcher`:
+In Yii it is done by configuring `config/application.php`:
 
 ```php
 return [
-    MiddlewareDispatcher::class => static fn (ContainerInterface $container) => (new MiddlewareDispatcher($container))
-        ->addMiddleware($container->get(Router::class))
-        ->addMiddleware($container->get(CsrfMiddleware::class))
-        ->addMiddleware($container->get(SessionMiddleware::class)) // <-- here
-        ->addMiddleware($container->get(ErrorCatcher::class)),
+    Yiisoft\Yii\Web\Application::class => [
+        '__construct()' => [
+            'dispatcher' => static function (Injector $injector) {
+                return ($injector->make(MiddlewareDispatcher::class))
+                    ->withMiddlewares(
+                        [
+                            Router::class,
+                            CsrfMiddleware::class,
+                            SessionMiddleware::class, // <-- this
+                            ErrorCatcher::class,
+                        ]
+                    );
+            },
+        ],
+    ],
 ];
 ```
 

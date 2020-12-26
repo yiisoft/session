@@ -35,10 +35,10 @@ final class Session implements SessionInterface
             session_set_save_handler($handler, true);
         }
 
-        // We set cookies using SessionMiddleware
+        // We set cookies using SessionMiddleware.
         $options['use_cookies'] = 0;
 
-        // Prevent PHP to send headers
+        // Prevent PHP to send headers.
         unset($options['cache_limiter']);
 
         $this->options = array_merge(self::DEFAULT_OPTIONS, $options);

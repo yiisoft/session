@@ -135,6 +135,11 @@ final class Flash implements FlashInterface
         $this->save($flashes);
     }
 
+    /**
+     * Obtains flash messages. Updates counters once per session.
+     *
+     * @return array Flash messages array.
+     */
     private function fetch(): array
     {
         // Ensure session is active (and has id).
@@ -147,6 +152,11 @@ final class Flash implements FlashInterface
         return $this->session->get(self::FLASH_PARAM, []);
     }
 
+    /**
+     * Save flash messages into session.
+     *
+     * @param array $flashes Flash messages to save.
+     */
     private function save(array $flashes): void
     {
         $this->session->set(self::FLASH_PARAM, $flashes);
