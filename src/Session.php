@@ -4,21 +4,28 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session;
 
+use SessionHandler;
+use SessionHandlerInterface;
+use Throwable;
+
 /**
  * Session provides session data management and the related configurations.
  */
 final class Session implements SessionInterface
 {
     private const DEFAULT_OPTIONS = [
-        'use_cookies' => 1,
         'cookie_secure' => 1,
-        'use_only_cookies' => 1,
+        'use_only_cookies' => 0,
         'cookie_httponly' => 1,
         'use_strict_mode' => 1,
         'sid_bits_per_character' => 5,
         'sid_length' => 48,
-        'cache_limiter' => 'nocache',
         'cookie_samesite' => 'Lax',
+    ];
+
+    private const MANDATORY_OPTIONS = [
+        'use_cookies' => 0, // We send cookie via middleware.
+        'cache_limiter' => '', // Disable sending Expires, Cache-Control and Pragma headers.
     ];
 
     private ?string $sessionId = null;
@@ -26,12 +33,12 @@ final class Session implements SessionInterface
 
     /**
      * @param array $options Session options. See {@link https://www.php.net/manual/en/session.configuration.php}.
-     * @param \SessionHandlerInterface|null $handler Session handler. If not specified, default PHP handler is used.
+     * @param SessionHandlerInterface|null $handler Session handler. If not specified, default PHP handler is used.
      */
-    public function __construct(array $options = [], \SessionHandlerInterface $handler = null)
+    public function __construct(array $options = [], SessionHandlerInterface $handler = null)
     {
         if ($handler === null) {
-            $handler = new \SessionHandler();
+            $handler = new SessionHandler();
         }
 
         session_set_save_handler($handler, true);
@@ -42,6 +49,10 @@ final class Session implements SessionInterface
 
     public function get(string $key, $default = null)
     {
+        if ($this->getId() === null) {
+            return $default;
+        }
+
         $this->open();
         return $_SESSION[$key] ?? $default;
     }
@@ -57,7 +68,7 @@ final class Session implements SessionInterface
         if ($this->isActive()) {
             try {
                 session_write_close();
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 throw new SessionException('Unable to close session.', (int)$e->getCode(), $e);
             }
         }
@@ -76,7 +87,7 @@ final class Session implements SessionInterface
         try {
             session_start($this->options);
             $this->sessionId = session_id();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             throw new SessionException('Failed to start session.', (int)$e->getCode(), $e);
         }
     }
@@ -98,7 +109,7 @@ final class Session implements SessionInterface
                 if (session_regenerate_id(true)) {
                     $this->sessionId = session_id();
                 }
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 throw new SessionException('Failed to regenerate ID.', (int)$e->getCode(), $e);
             }
         }
@@ -118,33 +129,47 @@ final class Session implements SessionInterface
 
     public function all(): array
     {
+        if ($this->getId() === null) {
+            return [];
+        }
+
         $this->open();
         return $_SESSION;
     }
 
     public function remove(string $key): void
     {
+        if ($this->getId() === null) {
+            return;
+        }
+
         $this->open();
         unset($_SESSION[$key]);
     }
 
     public function has(string $key): bool
     {
+        if ($this->getId() === null) {
+            return false;
+        }
+
         $this->open();
         return isset($_SESSION[$key]);
     }
 
-    public function pull(string $key)
+    public function pull(string $key, $default = null)
     {
-        $value = $this->get($key);
+        $value = $this->get($key, $default);
         $this->remove($key);
         return $value;
     }
 
     public function clear(): void
     {
-        $this->open();
-        $_SESSION = [];
+        if ($this->getId() !== null) {
+            $this->open();
+            $_SESSION = [];
+        }
     }
 
     public function destroy(): void

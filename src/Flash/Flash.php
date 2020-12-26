@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Flash;
 
 use Yiisoft\Session\SessionInterface;
+use function is_array;
 
 /**
  * Session-based implementation of flash messages, a special type of data, that is available only in the current request

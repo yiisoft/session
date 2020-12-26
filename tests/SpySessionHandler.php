@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session\Tests;
 
+use function array_key_exists;
+
 final class SpySessionHandler implements \SessionHandlerInterface
 {
     private array $calls = [];
