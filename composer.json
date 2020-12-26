@@ -1,9 +1,12 @@
 {
     "name": "yiisoft/session",
     "type": "library",
-    "description": "_____",
+    "description": "A session service, PSR-15 session middleware, and a flash message service which helps use one-time messages.",
     "keywords": [
-        "session"
+        "session",
+        "flash",
+        "psr-15",
+        "middleware"
     ],
     "homepage": "https://www.yiiframework.com/",
     "license": "BSD-3-Clause",
@@ -14,8 +17,6 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/session"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^7.4|^8.0",
         "psr/http-message": "^1.0",
@@ -42,9 +43,6 @@
         }
     },
     "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
-        },
         "config-plugin": {
             "web": "config/web.php",
             "params": "config/params.php"
