@@ -33,8 +33,8 @@ In Yii it is done by configuring `MiddlewareDispatcher`:
 return [
     MiddlewareDispatcher::class => static fn (ContainerInterface $container) => (new MiddlewareDispatcher($container))
         ->addMiddleware($container->get(Router::class))
-        ->addMiddleware($container->get(SessionMiddleware::class)) // <-- here
         ->addMiddleware($container->get(CsrfMiddleware::class))
+        ->addMiddleware($container->get(SessionMiddleware::class)) // <-- here
         ->addMiddleware($container->get(ErrorCatcher::class)),
 ];
 ```
