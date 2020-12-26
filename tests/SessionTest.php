@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SessionHandlerInterface;
 use Yiisoft\Session\Session;
 use Yiisoft\Session\SessionException;
 
@@ -15,20 +16,21 @@ final class SessionTest extends TestCase
 {
     private ?Session $session = null;
 
-    protected function tearDown(): void
-    {
-        if ($this->session !== null) {
-            $this->session->destroy();
-        }
-    }
-
-    public function getSession(array $options = [], \SessionHandlerInterface $handler = null): Session
+    public function getSession(array $options = [], SessionHandlerInterface $handler = null): Session
     {
         if ($this->session === null) {
             $this->session = new Session($options, $handler);
         }
 
         return $this->session;
+    }
+
+    protected function tearDown(): void
+    {
+        if ($this->session !== null) {
+            $this->session->destroy();
+            $this->session = null;
+        }
     }
 
     public function testGetAndSet(): void
@@ -38,11 +40,25 @@ final class SessionTest extends TestCase
         self::assertEquals('value', $session->get('key_get'));
     }
 
+    public function testGetWithoutIdDoesNotStartSession(): void
+    {
+        $session = $this->getSession();
+        self::assertEquals(null, $session->get('key_get'));
+        self::assertFalse($session->isActive());
+    }
+
     public function testHas(): void
     {
         $session = $this->getSession();
         $session->set('key_has', 'value');
         self::assertTrue($session->has('key_has'));
+    }
+
+    public function testHasWithoutIdDoesNotStartSession(): void
+    {
+        $session = $this->getSession();
+        self::assertEquals(false, $session->has('key_get'));
+        self::assertFalse($session->isActive());
     }
 
     public function testClose(): void
@@ -84,6 +100,8 @@ final class SessionTest extends TestCase
         $session->set('key_pull', 'value');
         self::assertEquals('value', $session->pull('key_pull'));
         self::assertEmpty($session->get('key_pull'));
+        self::assertEquals(null, $session->pull('non_existing'));
+        self::assertEquals('default', $session->pull('non_existing', 'default'));
     }
 
     public function testAll(): void
@@ -94,12 +112,42 @@ final class SessionTest extends TestCase
         self::assertEquals(['key_1' => 1, 'key_2' => 2], $session->all());
     }
 
+    public function testAllWithoutIdDoesNotStartSession(): void
+    {
+        $session = $this->getSession();
+        self::assertEquals([], $session->all());
+        self::assertFalse($session->isActive());
+    }
+
+    public function testRemove(): void
+    {
+        $session = $this->getSession();
+        $session->set('key_1', 1);
+        $session->set('key_2', 2);
+        $session->remove('key_1');
+        self::assertEquals(['key_2' => 2], $session->all());
+    }
+
+    public function testRemoveWithoutIdDoesNotStartSession(): void
+    {
+        $session = $this->getSession();
+        $session->remove('nonExisting');
+        self::assertFalse($session->isActive());
+    }
+
     public function testClear(): void
     {
         $session = $this->getSession();
         $session->set('key', 'value');
         $session->clear();
         self::assertEmpty($session->all());
+    }
+
+    public function testClearWithoutIdDoesNotStartSession(): void
+    {
+        $session = $this->getSession();
+        $session->clear();
+        self::assertFalse($session->isActive());
     }
 
     public function testSetId(): void

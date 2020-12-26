@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session;
 
+use DateInterval;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 use Yiisoft\Cookies\Cookie;
 
 /**
@@ -32,7 +34,7 @@ final class SessionMiddleware implements MiddlewareInterface
 
         try {
             $response = $handler->handle($request);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->session->discard();
             throw $e;
         }
@@ -48,7 +50,7 @@ final class SessionMiddleware implements MiddlewareInterface
 
         $this->session->close();
 
-        $currentSessionId = $this->session->getID();
+        $currentSessionId = $this->session->getId();
 
         if ($this->getSessionIdFromRequest($request) === $currentSessionId) {
             // SID not changed, no need to send new cookie.
@@ -76,7 +78,7 @@ final class SessionMiddleware implements MiddlewareInterface
             ->withSameSite($cookieParameters['samesite'] ?? Cookie::SAME_SITE_LAX);
 
         if ($cookieParameters['lifetime'] > 0) {
-            $sessionCookie = $sessionCookie->withMaxAge(new \DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
+            $sessionCookie = $sessionCookie->withMaxAge(new DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
         }
 
         return $sessionCookie->addToResponse($response);

@@ -92,10 +92,11 @@ interface SessionInterface
      * Read value and remove it afterwards.
      *
      * @param string $key The key to pull value from.
+     * @param mixed $default Default value in case there is no value with the key specified. Null by default.
      *
      * @return mixed The value.
      */
-    public function pull(string $key);
+    public function pull(string $key, $default = null);
 
     /**
      * Remove session data from runtime.
