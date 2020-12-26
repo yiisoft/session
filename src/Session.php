@@ -14,18 +14,15 @@ use Throwable;
 final class Session implements SessionInterface
 {
     private const DEFAULT_OPTIONS = [
+        'use_cookies' => 1,
         'cookie_secure' => 1,
-        'use_only_cookies' => 0,
+        'use_only_cookies' => 1,
         'cookie_httponly' => 1,
         'use_strict_mode' => 1,
         'sid_bits_per_character' => 5,
         'sid_length' => 48,
+        'cache_limiter' => 'nocache',
         'cookie_samesite' => 'Lax',
-    ];
-
-    private const MANDATORY_OPTIONS = [
-        'use_cookies' => 0, // We send cookie via middleware.
-        'cache_limiter' => '', // Disable sending Expires, Cache-Control and Pragma headers.
     ];
 
     private ?string $sessionId = null;
