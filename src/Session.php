@@ -14,14 +14,12 @@ use Throwable;
 final class Session implements SessionInterface
 {
     private const DEFAULT_OPTIONS = [
-        'use_cookies' => 1,
         'cookie_secure' => 1,
         'use_only_cookies' => 1,
         'cookie_httponly' => 1,
         'use_strict_mode' => 1,
         'sid_bits_per_character' => 5,
         'sid_length' => 48,
-        'cache_limiter' => 'nocache',
         'cookie_samesite' => 'Lax',
     ];
 
@@ -40,8 +38,13 @@ final class Session implements SessionInterface
 
         session_set_save_handler($handler, true);
 
-        $defaultOptions = self::DEFAULT_OPTIONS;
-        $this->options = array_merge($defaultOptions, $options);
+        // We set cookies using SessionMiddleware
+        $options['use_cookies'] = 0;
+
+        // Prevent PHP to send headers
+        unset($options['cache_limiter']);
+
+        $this->options = array_merge(self::DEFAULT_OPTIONS, $options);
     }
 
     public function get(string $key, $default = null)
