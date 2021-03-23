@@ -43,9 +43,12 @@
         }
     },
     "extra": {
+        "config-plugin-options": {
+            "source-directory": "config"
+        },
         "config-plugin": {
-            "web": "config/web.php",
-            "params": "config/params.php"
+            "web": "web.php",
+            "params": "params.php"
         }
     },
     "config": {
