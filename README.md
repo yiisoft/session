@@ -22,8 +22,8 @@ and a flash message service which helps use one-time messages.
 
 The package could be installed with composer:
 
-```
-composer require yiisoft/session
+```shell
+composer require yiisoft/session --prefer-dist
 ```
 
 In order to maintain a session between requests you need to add `SessionMiddleware` to your main middleware stack.
