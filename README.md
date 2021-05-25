@@ -33,7 +33,7 @@ In Yii it is done by configuring `config/application.php`:
 return [
     Yiisoft\Yii\Web\Application::class => [
         '__construct()' => [
-            'dispatcher' => static function (Injector $injector) {
+            'dispatcher' => DynamicReference::to(static function (Injector $injector) {
                 return ($injector->make(MiddlewareDispatcher::class))
                     ->withMiddlewares(
                         [
@@ -43,7 +43,7 @@ return [
                             ErrorCatcher::class,
                         ]
                     );
-            },
+            }),
         ],
     ],
 ];
