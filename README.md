@@ -26,8 +26,32 @@ The package could be installed with composer:
 composer require yiisoft/session --prefer-dist
 ```
 
-In order to maintain a session between requests you need to add `SessionMiddleware` to your main middleware stack.
-In Yii it is done by configuring `config/application.php`:
+In order to maintain a session between requests you need to add `SessionMiddleware` to your route group or
+application middlewares. Route group should be preferred when you have both API with token-based authentication
+and regular web routes in the same application. Having it this way avoids starting the session for API endpoints.
+
+### Yii3 configuration
+
+In order to add a session for a certain group of routes, edit `config/routes.php` like the following:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Yiisoft\Router\Group;
+use Yiisoft\Session\SessionMiddleware;
+
+return [
+    Group::create('/blog')
+        ->middleware(SessionMiddleware::class)
+        ->routes(
+            // ...
+        )
+];
+```
+
+To add a session to the whole application, edit `config/application.php` like the following:
 
 ```php
 return [
@@ -39,7 +63,7 @@ return [
                         [
                             Router::class,
                             CsrfMiddleware::class,
-                            SessionMiddleware::class, // <-- this
+                            SessionMiddleware::class, // <-- add this
                             ErrorCatcher::class,
                         ]
                     );
@@ -54,15 +78,38 @@ return [
 You can access session data through `SessionInterface`.
 
 ```php
-/** @var \Yiisoft\Session\SessionInterface $session */
-$myId = $session->get('my_id');
-if ($myId === null) {
-    $session->set('my_id', 42);
+public function actionProfile(\Yiisoft\Session\SessionInterface $session)
+{
+    // get a value
+    $lastAccessTime = $session->get('lastAccessTime');
+
+    // get all values
+    $sessionData = $session->all();
+        
+    // set a value
+    $session->set('lastAccessTime', time());
+
+    // check if value exists
+    if ($session->has('lastAccessTime')) {
+        // ...    
+    }
+    
+    // remove value
+    $session->remove('lastAccessTime');
+
+    // get value and then remove it
+    $sessionData = $session->pull('lastAccessTime');
+
+    // clear session data from runtime
+    $session->clear();
 }
 ```
 
-In case you need some data to remain in session until read, such as in case with displaying a message on the next page,
-`FlashInteface` is your friend:
+In case you need some data to remain in session until read, such as in case with displaying a message on the next page
+flash messages is what you need. A flash message is a special type of data, that is available only in the current request
+and the next request. After that, it will be deleted automatically.
+
+`FlashInteface` usage is the following:
 
 ```php
 /** @var Yiisoft\Session\Flash\FlashInterface $flash */
@@ -76,6 +123,49 @@ if ($warning !== null) {
     // do something with it
 }
 ```
+
+## Opening and closing session
+
+```php
+public function actionProfile(\Yiisoft\Session\SessionInterface $session)
+{
+    // start session if it's not yet started
+    $session->open();
+
+    // work with session
+
+    // write session values and then close it
+    $session->close();
+}
+``` 
+
+> Note: Closing session as early as possible is a good practice since many session implementations are blocking other
+> requests while session is open.
+
+There are two more ways to close session:
+
+```php
+public function actionProfile(\Yiisoft\Session\SessionInterface $session)
+{
+    // discard changes and close session
+    $session->discard();
+
+    // destroy session completely
+    $session->destroy();    
+}
+```
+
+## Custom session storage
+
+When using `Yiisoft\Session\Session` as session component, you can provide your own storage implementation:
+
+```php
+$handler = new MySessionHandler();
+$session = new \Yiisoft\Session\Session([], $handler);
+```
+
+Custom storage must implement `\SessionHandlerInterface`.
+
 
 ## Unit testing
 
