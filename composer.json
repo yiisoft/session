@@ -17,6 +17,16 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/session"
     },
+    "funding": [
+        {
+            "type": "opencollective",
+            "url": "https://opencollective.com/yiisoft"
+        },
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/yiisoft"
+        }
+    ],
     "require": {
         "php": "^7.4|^8.0",
         "psr/http-message": "^1.0",
@@ -26,11 +36,11 @@
         "yiisoft/cookies": "^1.0"
     },
     "require-dev": {
-        "nyholm/psr7": "^1.3",
+        "nyholm/psr7": "^1.4",
         "phpunit/phpunit": "^9.5",
-        "roave/infection-static-analysis-plugin": "^1.6",
+        "roave/infection-static-analysis-plugin": "^1.9",
         "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.3"
+        "vimeo/psalm": "^4.9"
     },
     "autoload": {
         "psr-4": {
