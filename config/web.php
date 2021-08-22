@@ -16,6 +16,9 @@ return [
             $params['yiisoft/session']['session']['options'],
             $params['yiisoft/session']['session']['handler'],
         ],
+        'reset' => function () {
+            $this->destroy();
+        },
     ],
     FlashInterface::class => Flash::class,
 ];
