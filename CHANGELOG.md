@@ -2,7 +2,7 @@
 
 ## 1.0.3 under development
 
-- no changes in this release.
+- Bug #28: Add missing state resetter config (rustamwin)
 
 ## 1.0.2 April 13, 2021
 
