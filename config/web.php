@@ -16,6 +16,10 @@ return [
             $params['yiisoft/session']['session']['options'],
             $params['yiisoft/session']['session']['handler'],
         ],
+        'reset' => function () {
+            $this->sessionId = null;
+            $this->close();
+        },
     ],
     FlashInterface::class => Flash::class,
 ];
