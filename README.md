@@ -59,16 +59,16 @@ To add a session to the whole application, edit `config/application.php` like th
 
 ```php
 return [
-    Yiisoft\Yii\Web\Application::class => [
+    Yiisoft\Yii\Http\Application::class => [
         '__construct()' => [
             'dispatcher' => DynamicReference::to(static function (Injector $injector) {
                 return ($injector->make(MiddlewareDispatcher::class))
                     ->withMiddlewares(
                         [
-                            Router::class,
-                            CsrfMiddleware::class,
-                            SessionMiddleware::class, // <-- add this
                             ErrorCatcher::class,
+                            SessionMiddleware::class, // <-- add this
+                            CsrfMiddleware::class,
+                            Router::class,
                         ]
                     );
             }),
