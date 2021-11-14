@@ -66,11 +66,14 @@ final class Session implements SessionInterface
             try {
                 session_write_close();
             } catch (Throwable $e) {
-                throw new SessionException('Unable to close session.', (int)$e->getCode(), $e);
+                throw new SessionException('Unable to close session.', (int) $e->getCode(), $e);
             }
         }
     }
 
+    /**
+     * @throw SessionException When start session is failed.
+     */
     public function open(): void
     {
         if ($this->isActive()) {
@@ -131,6 +134,8 @@ final class Session implements SessionInterface
         }
 
         $this->open();
+        /** @var array $_SESSION */
+
         return $_SESSION;
     }
 
