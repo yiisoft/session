@@ -13,32 +13,34 @@ final class BadSessionHandler implements \SessionHandlerInterface
         $this->failAt = $failAt;
     }
 
-    public function close()
+    public function close(): bool
     {
         return $this->getReturnValue('close');
     }
 
-    public function destroy($session_id)
+    public function destroy($session_id): bool
     {
         return $this->getReturnValue('destroy');
     }
 
+    #[\ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
         return $this->getReturnValue('gc');
     }
 
-    public function open($save_path, $name)
+    public function open($save_path, $name): bool
     {
         return $this->getReturnValue('open');
     }
 
+    #[\ReturnTypeWillChange]
     public function read($session_id)
     {
         return '';
     }
 
-    public function write($session_id, $session_data)
+    public function write($session_id, $session_data): bool
     {
         return $this->getReturnValue('write');
     }
