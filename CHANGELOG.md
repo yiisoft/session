@@ -1,5 +1,9 @@
 # Yii Session Change Log
 
+## 1.0.4 under development
+
+- no changes in this release.
+
 ## 1.0.3 January 28, 2022
 
 - Bug #28: Add missing state resetter config (rustamwin)
