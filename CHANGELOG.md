@@ -2,7 +2,7 @@
 
 ## 1.0.4 under development
 
-- no changes in this release.
+- Bug #32: Fix not sending cookie when session is closed manually (vjik)
 
 ## 1.0.3 January 28, 2022
 
