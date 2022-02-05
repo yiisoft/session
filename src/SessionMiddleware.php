@@ -54,20 +54,29 @@ final class SessionMiddleware implements MiddlewareInterface
      */
     private function commitSession(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        if (!$this->session->isActive()) {
-            return $response;
+        if ($this->session->isActive()) {
+            $this->session->close();
         }
 
-        $this->session->close();
-
         $currentSessionId = $this->session->getId();
+        if ($currentSessionId === null) {
+            return $response;
+        }
 
         if ($this->getSessionIdFromRequest($request) === $currentSessionId) {
             // SID not changed, no need to send new cookie.
             return $response;
         }
 
-        /** @psalm-var array{lifetime: int, path: string, domain: string, secure: bool, httponly: bool, samesite: string} */
+        /** @psalm-var array{
+         *      lifetime: int,
+         *      path: string,
+         *      domain: string,
+         *      secure: bool,
+         *      httponly: bool,
+         *      samesite: string
+         * }
+         */
         $cookieParameters = $this->session->getCookieParameters();
 
         $cookieDomain = $cookieParameters['domain'];
@@ -77,10 +86,13 @@ final class SessionMiddleware implements MiddlewareInterface
 
         $useSecureCookie = $cookieParameters['secure'];
         if ($useSecureCookie && $request->getUri()->getScheme() !== 'https') {
-            throw new SessionException('"cookie_secure" is on but connection is not secure. Either set Session "cookie_secure" option to "0" or make connection secure.');
+            throw new SessionException(
+                '"cookie_secure" is on but connection is not secure. ' .
+                'Either set Session "cookie_secure" option to "0" or make connection secure.'
+            );
         }
 
-        $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId ?? ''))
+        $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId))
             ->withPath($cookieParameters['path'])
             ->withDomain($cookieDomain)
             ->withHttpOnly($cookieParameters['httponly'])
