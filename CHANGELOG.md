@@ -1,6 +1,6 @@
 # Yii Session Change Log
 
-## 1.0.4 under development
+## 1.0.4 February 05, 2022
 
 - Bug #32: Fix not sending cookie when session is closed manually (vjik)
 
