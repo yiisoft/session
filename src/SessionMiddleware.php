@@ -81,11 +81,15 @@ final class SessionMiddleware implements MiddlewareInterface
 
         $cookieDomain = $cookieParameters['domain'];
         if (empty($cookieDomain)) {
-            $cookieDomain = $request->getUri()->getHost();
+            $cookieDomain = $request
+                ->getUri()
+                ->getHost();
         }
 
         $useSecureCookie = $cookieParameters['secure'];
-        if ($useSecureCookie && $request->getUri()->getScheme() !== 'https') {
+        if ($useSecureCookie && $request
+                ->getUri()
+                ->getScheme() !== 'https') {
             throw new SessionException(
                 '"cookie_secure" is on but connection is not secure. ' .
                 'Either set Session "cookie_secure" option to "0" or make connection secure.'
