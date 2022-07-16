@@ -57,6 +57,7 @@ final class Session implements SessionInterface
     public function set(string $key, $value): void
     {
         $this->open();
+        /** @var mixed */
         $_SESSION[$key] = $value;
     }
 
@@ -161,6 +162,7 @@ final class Session implements SessionInterface
 
     public function pull(string $key, $default = null)
     {
+        /** @var mixed */
         $value = $this->get($key, $default);
         $this->remove($key);
         return $value;

@@ -47,11 +47,14 @@ final class Flash implements FlashInterface
         $flashes = $this->fetch();
 
         $list = [];
+
+        /** @var mixed $value */
         foreach ($flashes as $key => $value) {
             if ($key === self::COUNTERS) {
                 continue;
             }
 
+            /** @var mixed */
             $list[$key] = $value;
             if ($flashes[self::COUNTERS][$key] < 0) {
                 // Mark for deletion in the next request.
@@ -68,6 +71,7 @@ final class Flash implements FlashInterface
     {
         $flashes = $this->fetch();
         $flashes[self::COUNTERS][$key] = $removeAfterAccess ? -1 : 0;
+        /** @var mixed */
         $flashes[$key] = $value;
         $this->save($flashes);
     }
@@ -80,6 +84,7 @@ final class Flash implements FlashInterface
         if (empty($flashes[$key])) {
             $flashes[$key] = [$value];
         } elseif (is_array($flashes[$key])) {
+            /** @var mixed */
             $flashes[$key][] = $value;
         } else {
             $flashes[$key] = [$flashes[$key], $value];
@@ -91,7 +96,7 @@ final class Flash implements FlashInterface
     public function remove(string $key): void
     {
         $flashes = $this->fetch();
-        unset($flashes[$key], $flashes[self::COUNTERS][$key]);
+        unset($flashes[self::COUNTERS][$key], $flashes[$key]);
         $this->save($flashes);
     }
 
@@ -112,17 +117,19 @@ final class Flash implements FlashInterface
      */
     private function updateCounters(): void
     {
+        /** @var mixed $flashes */
         $flashes = $this->session->get(self::FLASH_PARAM, []);
         if (!is_array($flashes)) {
             $flashes = [self::COUNTERS => []];
         }
 
+        /** @var mixed $counters */
         $counters = $flashes[self::COUNTERS] ?? [];
         if (!is_array($counters)) {
             $counters = [];
         }
 
-
+        /** @var array<string, int> $counters */
         foreach ($counters as $key => $count) {
             if ($count > 0) {
                 unset($counters[$key], $flashes[$key]);
@@ -139,6 +146,7 @@ final class Flash implements FlashInterface
      * Obtains flash messages. Updates counters once per session.
      *
      * @return array Flash messages array.
+     * @psalm-return array{__counters:array<string,int>,mixed}
      */
     private function fetch(): array
     {
@@ -149,6 +157,7 @@ final class Flash implements FlashInterface
             $this->updateCounters();
         }
 
+        /** @psalm-var array{__counters:array<string,int>,mixed} */
         return $this->session->get(self::FLASH_PARAM, []);
     }
 
