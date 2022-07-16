@@ -157,6 +157,7 @@ final class Flash implements FlashInterface
             $this->updateCounters();
         }
 
+        /** @psalm-var array{__counters:array<string,int>,mixed} */
         return $this->session->get(self::FLASH_PARAM, []);
     }
 
