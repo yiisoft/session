@@ -57,7 +57,7 @@ final class Session implements SessionInterface
     public function set(string $key, $value): void
     {
         $this->open();
-        /** @psalm-suppress MixedAssignment */
+        /** @var mixed */
         $_SESSION[$key] = $value;
     }
 
@@ -162,7 +162,7 @@ final class Session implements SessionInterface
 
     public function pull(string $key, $default = null)
     {
-        /** @psalm-suppress MixedAssignment */
+        /** @var mixed */
         $value = $this->get($key, $default);
         $this->remove($key);
         return $value;
