@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Tests;
 
 use Nyholm\Psr7\Response;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

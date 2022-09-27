@@ -42,9 +42,7 @@ final class SessionMiddleware implements MiddlewareInterface
     /**
      * Close session and add/modify response session cookie if necessary.
      *
-     *
      * @throws \Exception
-     *
      */
     private function commitSession(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
