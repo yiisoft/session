@@ -18,11 +18,8 @@ use Yiisoft\Cookies\Cookie;
  */
 final class SessionMiddleware implements MiddlewareInterface
 {
-    private SessionInterface $session;
-
-    public function __construct(SessionInterface $session)
+    public function __construct(private SessionInterface $session)
     {
-        $this->session = $session;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -45,12 +42,7 @@ final class SessionMiddleware implements MiddlewareInterface
     /**
      * Close session and add/modify response session cookie if necessary.
      *
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     *
      * @throws \Exception
-     *
-     * @return ResponseInterface
      */
     private function commitSession(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {

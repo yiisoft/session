@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Tests;
 
 use Nyholm\Psr7\Response;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -30,30 +29,15 @@ final class SessionMiddlewareTest extends TestCase
     private const REQUEST_SID = 'exampleRequestSidValue';
     private const SESSION_NAME = 'exampleSessionName';
 
-    /**
-     * @var MockObject|RequestHandlerInterface
-     */
-    private $requestHandlerMock;
+    private \PHPUnit\Framework\MockObject\MockObject|\Psr\Http\Server\RequestHandlerInterface $requestHandlerMock;
 
-    /**
-     * @var MockObject|SessionInterface
-     */
-    private $sessionMock;
+    private \PHPUnit\Framework\MockObject\MockObject|\Yiisoft\Session\SessionInterface $sessionMock;
 
-    /**
-     * @var MockObject|ServerRequestInterface
-     */
-    private $requestMock;
+    private \PHPUnit\Framework\MockObject\MockObject|\Psr\Http\Message\ServerRequestInterface $requestMock;
 
-    /**
-     * @var MockObject|UriInterface
-     */
-    private $uriMock;
+    private \PHPUnit\Framework\MockObject\MockObject|\Psr\Http\Message\UriInterface $uriMock;
 
-    /**
-     * @var SessionMiddleware
-     */
-    private $sessionMiddleware;
+    private \Yiisoft\Session\SessionMiddleware $sessionMiddleware;
 
     public function setUp(): void
     {
