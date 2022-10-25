@@ -2,7 +2,7 @@
 
 ## 1.0.5 under development
 
-- no changes in this release.
+- Enh #39: Add NullSession (@xepozz)
 
 ## 1.0.4 February 05, 2022
 
