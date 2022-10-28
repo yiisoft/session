@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class NullSession implements SessionInterface
 {
     public function get(string $key, $default = null)
     {
-        return $default;
+        return null;
     }
 
     public function set(string $key, $value): void
@@ -52,7 +55,7 @@ final class NullSession implements SessionInterface
 
     public function pull(string $key, $default = null)
     {
-        return $default;
+        return null;
     }
 
     public function destroy(): void
