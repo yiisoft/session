@@ -1,6 +1,6 @@
 # Yii Session Change Log
 
-## 1.0.5 under development
+## 1.1.0 October 28, 2022
 
 - New #39: Add `NullSession` (@xepozz)
 
