@@ -125,6 +125,7 @@ final class Session implements SessionInterface
 
     public function getName(): string
     {
+        $this->open();
         return session_name();
     }
 

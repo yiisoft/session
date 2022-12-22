@@ -202,4 +202,11 @@ final class SessionTest extends TestCase
         $session->open();
         $session->regenerateId();
     }
+
+    public function testCustomSessionName(): void
+    {
+        $session = $this->getSession(['name' => 'test']);
+
+        $this->assertSame('test', $session->getName());
+    }
 }
