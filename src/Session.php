@@ -9,6 +9,10 @@ use Throwable;
 
 /**
  * Session provides session data management and the related configurations.
+ *
+ * @psalm-type SessionOptions = array{
+ *     name?: string,
+ * }&array<string,mixed>
  */
 final class Session implements SessionInterface
 {
@@ -23,11 +27,17 @@ final class Session implements SessionInterface
     ];
 
     private ?string $sessionId = null;
+
+    /**
+     * @psalm-var SessionOptions
+     */
     private array $options;
 
     /**
      * @param array $options Session options. See {@link https://www.php.net/manual/en/session.configuration.php}.
      * @param SessionHandlerInterface|null $handler Session handler. If not specified, default PHP handler is used.
+     *
+     * @psalm-param SessionOptions $options
      */
     public function __construct(array $options = [], SessionHandlerInterface $handler = null)
     {
@@ -125,7 +135,11 @@ final class Session implements SessionInterface
 
     public function getName(): string
     {
-        return session_name();
+        if ($this->isActive()) {
+            return session_name();
+        }
+
+        return $this->options['name'] ?? session_name();
     }
 
     public function all(): array

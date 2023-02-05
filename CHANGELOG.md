@@ -2,7 +2,7 @@
 
 ## 1.1.1 under development
 
-- no changes in this release.
+- Fix #45: Returns correct session name when used custom name and call `Session::getName()` before session open (@vjik)
 
 ## 1.1.0 October 28, 2022
 
