@@ -1,8 +1,9 @@
 # Yii Session Change Log
 
-## 1.1.1 under development
+## 2.0.0 under development
 
 - Fix #45: Returns correct session name when used custom name and call `Session::getName()` before session open (@vjik)
+- Chg #47: Adapt configuration group names to Yii conventions (@vjik)
 
 ## 1.1.0 October 28, 2022
 
@@ -18,7 +19,7 @@
 
 ## 1.0.2 April 13, 2021
 
-- Chg: Adjust config for yiisoft/factory changes (@vjik, @samdark)
+- Chg: Adjust config for `yiisoft/factory` changes (@vjik, @samdark)
 
 ## 1.0.1 March 23, 2021
 
