@@ -1,9 +1,9 @@
 # Yii Session Change Log
 
-## 2.0.0 under development
+## 2.0.0 February 13, 2023
 
-- Fix #45: Returns correct session name when used custom name and call `Session::getName()` before session open (@vjik)
 - Chg #47: Adapt configuration group names to Yii conventions (@vjik)
+- Fix #45: Returns correct session name when used custom name and call `Session::getName()` before session open (@vjik)
 
 ## 1.1.0 October 28, 2022
 
