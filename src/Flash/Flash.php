@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Flash;
 
 use Yiisoft\Session\SessionInterface;
+
 use function is_array;
 
 /**
