@@ -20,7 +20,7 @@ and a flash message service which helps use one-time messages.
 
 ## Requirements
 
-- PHP 7.4 or higher.
+- PHP 8.0 or higher.
 
 ## Installation
 
