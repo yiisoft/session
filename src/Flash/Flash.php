@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Flash;
 
 use Yiisoft\Session\SessionInterface;
+
 use function is_array;
 
 /**
@@ -144,6 +145,7 @@ final class Flash implements FlashInterface
      * Obtains flash messages. Updates counters once per session.
      *
      * @return array Flash messages array.
+     *
      * @psalm-return array{__counters:array<string,int>,mixed}
      */
     private function fetch(): array
