@@ -1,8 +1,8 @@
 # Yii Session Change Log
 
-## 2.0.1 under development
+## 2.1.0 under development
 
-- no changes in this release.
+- Chg #37: Raise the minimum version of PHP to 8.0 (@xepozz, @rustamwin)
 
 ## 2.0.0 February 13, 2023
 

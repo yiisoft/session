@@ -19,11 +19,9 @@ final class Flash implements FlashInterface
     private const FLASH_PARAM = '__flash';
 
     private ?string $sessionId = null;
-    private SessionInterface $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(private SessionInterface $session)
     {
-        $this->session = $session;
     }
 
     public function get(string $key)
@@ -152,6 +150,7 @@ final class Flash implements FlashInterface
      * Obtains flash messages. Updates counters once per session.
      *
      * @return array Flash messages array.
+     *
      * @psalm-return array{__counters:array<string,int>}&array
      */
     private function fetch(): array
