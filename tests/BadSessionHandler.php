@@ -6,11 +6,8 @@ namespace Yiisoft\Session\Tests;
 
 final class BadSessionHandler implements \SessionHandlerInterface
 {
-    private array $failAt;
-
-    public function __construct(array $failAt = [])
+    public function __construct(private array $failAt = [])
     {
-        $this->failAt = $failAt;
     }
 
     public function close(): bool

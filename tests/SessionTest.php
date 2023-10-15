@@ -202,4 +202,41 @@ final class SessionTest extends TestCase
         $session->open();
         $session->regenerateId();
     }
+
+    public function dataSessionNameBeforeOpen(): array
+    {
+        return [
+            ['PHPSESSID', []],
+            ['test', ['name' => 'test']],
+        ];
+    }
+
+    /**
+     * @dataProvider dataSessionNameBeforeOpen
+     */
+    public function testSessionNameBeforeOpen(string $expectedName, array $options): void
+    {
+        $session = $this->getSession($options);
+
+        $this->assertSame($expectedName, $session->getName());
+    }
+
+    public function dataSessionNameAfterOpen(): array
+    {
+        return [
+            ['PHPSESSID', []],
+            ['test', ['name' => 'test']],
+        ];
+    }
+
+    /**
+     * @dataProvider dataSessionNameAfterOpen
+     */
+    public function testSessionNameAfterOpen(string $expectedName, array $options): void
+    {
+        $session = $this->getSession($options);
+        $session->open();
+
+        $this->assertSame($expectedName, $session->getName());
+    }
 }

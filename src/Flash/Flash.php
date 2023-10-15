@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Session\Flash;
 
 use Yiisoft\Session\SessionInterface;
+
 use function is_array;
 
 /**
@@ -18,11 +19,9 @@ final class Flash implements FlashInterface
     private const FLASH_PARAM = '__flash';
 
     private ?string $sessionId = null;
-    private SessionInterface $session;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(private SessionInterface $session)
     {
-        $this->session = $session;
     }
 
     public function get(string $key)
@@ -70,7 +69,10 @@ final class Flash implements FlashInterface
     public function set(string $key, $value = true, bool $removeAfterAccess = true): void
     {
         $flashes = $this->fetch();
+
+        /** @psalm-suppress MixedArrayAssignment */
         $flashes[self::COUNTERS][$key] = $removeAfterAccess ? -1 : 0;
+
         /** @var mixed */
         $flashes[$key] = $value;
         $this->save($flashes);
@@ -79,6 +81,8 @@ final class Flash implements FlashInterface
     public function add(string $key, $value = true, bool $removeAfterAccess = true): void
     {
         $flashes = $this->fetch();
+
+        /** @psalm-suppress MixedArrayAssignment */
         $flashes[self::COUNTERS][$key] = $removeAfterAccess ? -1 : 0;
 
         if (empty($flashes[$key])) {
@@ -146,7 +150,8 @@ final class Flash implements FlashInterface
      * Obtains flash messages. Updates counters once per session.
      *
      * @return array Flash messages array.
-     * @psalm-return array{__counters:array<string,int>,mixed}
+     *
+     * @psalm-return array{__counters:array<string,int>}&array
      */
     private function fetch(): array
     {
@@ -157,7 +162,7 @@ final class Flash implements FlashInterface
             $this->updateCounters();
         }
 
-        /** @psalm-var array{__counters:array<string,int>,mixed} */
+        /** @psalm-var array{__counters:array<string,int>}&array */
         return $this->session->get(self::FLASH_PARAM, []);
     }
 

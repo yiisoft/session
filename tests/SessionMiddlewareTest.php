@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session\Tests;
 
+use Exception;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,30 +31,15 @@ final class SessionMiddlewareTest extends TestCase
     private const REQUEST_SID = 'exampleRequestSidValue';
     private const SESSION_NAME = 'exampleSessionName';
 
-    /**
-     * @var MockObject|RequestHandlerInterface
-     */
-    private $requestHandlerMock;
+    private MockObject|RequestHandlerInterface $requestHandlerMock;
 
-    /**
-     * @var MockObject|SessionInterface
-     */
-    private $sessionMock;
+    private MockObject|SessionInterface $sessionMock;
 
-    /**
-     * @var MockObject|ServerRequestInterface
-     */
-    private $requestMock;
+    private MockObject|ServerRequestInterface $requestMock;
 
-    /**
-     * @var MockObject|UriInterface
-     */
-    private $uriMock;
+    private MockObject|UriInterface $uriMock;
 
-    /**
-     * @var SessionMiddleware
-     */
-    private $sessionMiddleware;
+    private SessionMiddleware $sessionMiddleware;
 
     public function setUp(): void
     {
@@ -70,13 +56,13 @@ final class SessionMiddlewareTest extends TestCase
         $this->requestHandlerMock
             ->expects($this->once())
             ->method('handle')
-            ->willThrowException(new \Exception());
+            ->willThrowException(new Exception());
 
         $this->sessionMock
             ->expects($this->once())
             ->method('discard');
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
     }
 
