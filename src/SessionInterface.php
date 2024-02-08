@@ -17,7 +17,7 @@ interface SessionInterface
      *
      * @return mixed
      */
-    public function get(string $key, mixed $default = null);
+    public function get(string $key, $default = null);
 
     /**
      * Write value into session.
@@ -25,7 +25,7 @@ interface SessionInterface
      * @param string $key Key to write value to.
      * @param mixed $value Value to write.
      */
-    public function set(string $key, mixed $value): void;
+    public function set(string $key, $value): void;
 
     /**
      * Write session and close it.
@@ -94,7 +94,7 @@ interface SessionInterface
      *
      * @return mixed The value.
      */
-    public function pull(string $key, mixed $default = null);
+    public function pull(string $key, $default = null);
 
     /**
      * Remove session data from runtime.

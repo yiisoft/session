@@ -41,7 +41,7 @@ interface FlashInterface
      * regardless if it is accessed or not. If true (default value), the flash message will remain until after
      * it is accessed.
      */
-    public function set(string $key, mixed $value = true, bool $removeAfterAccess = true): void;
+    public function set(string $key, $value = true, bool $removeAfterAccess = true): void;
 
     /**
      * Adds a flash message.
@@ -54,7 +54,7 @@ interface FlashInterface
      * regardless if it is accessed or not. If true (default value), the flash message will remain until after
      * it is accessed.
      */
-    public function add(string $key, mixed $value = true, bool $removeAfterAccess = true): void;
+    public function add(string $key, $value = true, bool $removeAfterAccess = true): void;
 
     /**
      * Removes a flash message.
