@@ -47,13 +47,11 @@ final class Flash implements FlashInterface
 
         $list = [];
 
-        /** @var mixed $value */
         foreach ($flashes as $key => $value) {
             if ($key === self::COUNTERS) {
                 continue;
             }
 
-            /** @var mixed */
             $list[$key] = $value;
             if ($flashes[self::COUNTERS][$key] < 0) {
                 // Mark for deletion in the next request.
@@ -73,7 +71,6 @@ final class Flash implements FlashInterface
         /** @psalm-suppress MixedArrayAssignment */
         $flashes[self::COUNTERS][$key] = $removeAfterAccess ? -1 : 0;
 
-        /** @var mixed */
         $flashes[$key] = $value;
         $this->save($flashes);
     }
@@ -88,7 +85,6 @@ final class Flash implements FlashInterface
         if (empty($flashes[$key])) {
             $flashes[$key] = [$value];
         } elseif (is_array($flashes[$key])) {
-            /** @var mixed */
             $flashes[$key][] = $value;
         } else {
             $flashes[$key] = [$flashes[$key], $value];
@@ -121,13 +117,11 @@ final class Flash implements FlashInterface
      */
     private function updateCounters(): void
     {
-        /** @var mixed $flashes */
         $flashes = $this->session->get(self::FLASH_PARAM, []);
         if (!is_array($flashes)) {
             $flashes = [self::COUNTERS => []];
         }
 
-        /** @var mixed $counters */
         $counters = $flashes[self::COUNTERS] ?? [];
         if (!is_array($counters)) {
             $counters = [];

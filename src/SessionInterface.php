@@ -74,8 +74,6 @@ interface SessionInterface
 
     /**
      * Remove value from session.
-     *
-     * @param string $key
      */
     public function remove(string $key): void;
 
