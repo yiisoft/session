@@ -1,6 +1,6 @@
 # Yii Session Change Log
 
-## 2.1.0 under development
+## 2.1.0 May 02, 2024
 
 - Chg #37: Raise the minimum version of PHP to 8.0 (@xepozz, @rustamwin)
 - Enh #59: Add support for `psr/http-message` version `^2.0` (@vjik)
