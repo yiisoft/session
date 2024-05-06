@@ -23,7 +23,7 @@ and a flash message service which helps use one-time messages.
 
 ## Installation
 
-The package could be installed with composer:
+The package could be installed with [Composer](https://getcomposer.org):
 
 ```shell
 composer require yiisoft/session
@@ -38,10 +38,6 @@ and regular web routes in the same application. Having it this way avoids starti
 In order to add a session for a certain group of routes, edit `config/routes.php` like the following:
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use Yiisoft\Router\Group;
 use Yiisoft\Session\SessionMiddleware;
 
@@ -169,32 +165,12 @@ $session = new \Yiisoft\Session\Session([], $handler);
 
 Custom storage must implement `\SessionHandlerInterface`.
 
-## Testing
+## Documentation
 
-### Unit testing
+- [Internals](docs/internals.md)
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
-
-```shell
-./vendor/bin/phpunit
-```
-
-### Mutation testing
-
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework with
-[Infection Static Analysis Plugin](https://github.com/Roave/infection-static-analysis-plugin). To run it:
-
-```shell
-./vendor/bin/roave-infection-static-analysis-plugin
-```
-
-### Static analysis
-
-The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
-
-```shell
-./vendor/bin/psalm
-```
+If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
+You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
 
 ## License
 
