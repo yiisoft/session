@@ -92,6 +92,8 @@ final class Session implements SessionInterface
 
         if ($this->sessionId !== null) {
             session_id($this->sessionId);
+        } else {
+            session_id(bin2hex(random_bytes(16)));
         }
 
         try {
