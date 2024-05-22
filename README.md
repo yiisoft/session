@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
     </a>
     <h1 align="center">Yii Session</h1>
     <br>
@@ -136,7 +136,7 @@ public function actionProfile(\Yiisoft\Session\SessionInterface $session)
     // write session values and then close it
     $session->close();
 }
-``` 
+```
 
 > Note: Closing session as early as possible is a good practice since many session implementations are blocking other
 > requests while session is open.
