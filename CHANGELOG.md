@@ -2,7 +2,7 @@
 
 ## 2.1.1 under development
 
-- no changes in this release.
+- Bug #61: Reset session between requests in long-running applications (@viktorprogger, @roxblnfk)
 
 ## 2.1.0 May 02, 2024
 
