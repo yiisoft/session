@@ -3,6 +3,7 @@
 ## 3.0.0 under development
 
 - Chg #66: Remove `sid_length` and `sid_bits_per_character` options (@vjik)
+- Chg #67: Mark `SessionException` as final (@vjik)
 
 ## 2.1.0 May 02, 2024
 
