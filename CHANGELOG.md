@@ -1,6 +1,6 @@
 # Yii Session Change Log
 
-## 2.1.1 under development
+## 3.0.0 under development
 
 - Chg #66: Remove `sid_length` and `sid_bits_per_character` options (@vjik)
 
