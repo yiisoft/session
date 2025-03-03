@@ -21,8 +21,6 @@ final class Session implements SessionInterface
         'use_only_cookies' => 1,
         'cookie_httponly' => 1,
         'use_strict_mode' => 1,
-        'sid_bits_per_character' => 5,
-        'sid_length' => 48,
         'cookie_samesite' => 'Lax',
     ];
 
