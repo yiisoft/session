@@ -11,5 +11,3 @@ explicitly, values will change after Yii Session update:
 
 - `sid_length` from `48` to `32`;
 - `sid_bits_per_character` from `5` to `4`.
-
-Keep this in mind in your application.
