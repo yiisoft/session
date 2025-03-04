@@ -94,6 +94,9 @@ final class Session implements SessionInterface
 
         try {
             session_start($this->options);
+            /**
+             * @var string Without `id` parameter `session_id()` always returns string.
+             */
             $this->sessionId = session_id();
         } catch (Throwable $e) {
             throw new SessionException('Failed to start session.', (int)$e->getCode(), $e);
@@ -115,6 +118,9 @@ final class Session implements SessionInterface
         if ($this->isActive()) {
             try {
                 if (session_regenerate_id(true)) {
+                    /**
+                     * @var string Without `id` parameter `session_id()` always returns string.
+                     */
                     $this->sessionId = session_id();
                 }
             } catch (Throwable $e) {
