@@ -1,6 +1,6 @@
 # Yii Session Change Log
 
-## 3.0.0 under development
+## 3.0.0 March 04, 2025
 
 - Chg #66: Remove `sid_length` and `sid_bits_per_character` options (@vjik)
 - Chg #67: Mark `SessionException` as final (@vjik)
