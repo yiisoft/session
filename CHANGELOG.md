@@ -1,5 +1,9 @@
 # Yii Session Change Log
 
+## 3.0.1 under development
+
+- no changes in this release.
+
 ## 3.0.0 March 04, 2025
 
 - Chg #66: Remove `sid_length` and `sid_bits_per_character` options (@vjik)
