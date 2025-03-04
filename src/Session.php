@@ -37,7 +37,7 @@ final class Session implements SessionInterface
      *
      * @psalm-param SessionOptions $options
      */
-    public function __construct(array $options = [], SessionHandlerInterface $handler = null)
+    public function __construct(array $options = [], ?SessionHandlerInterface $handler = null)
     {
         if ($handler !== null) {
             session_set_save_handler($handler, true);

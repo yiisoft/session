@@ -29,22 +29,22 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "psr/http-message": "^1.0|^2.0",
+        "php": "8.0 - 8.4",
+        "psr/http-message": "^1.0 || ^2.0",
         "psr/http-message-implementation": "1.0",
         "psr/http-server-handler": "^1.0",
         "psr/http-server-middleware": "^1.0",
         "yiisoft/cookies": "^1.0"
     },
     "require-dev": {
-        "maglnet/composer-require-checker": "^4.2",
-        "nyholm/psr7": "^1.4",
-        "phpunit/phpunit": "^9.5",
-        "rector/rector": "^2.0.3",
-        "roave/infection-static-analysis-plugin": "^1.16",
-        "spatie/phpunit-watcher": "^1.23",
-        "vimeo/psalm": "^4.30|^5.6",
-        "yiisoft/di": "^1.1"
+        "maglnet/composer-require-checker": "^4.4",
+        "nyholm/psr7": "^1.8.2",
+        "phpunit/phpunit": "^9.6.22",
+        "rector/rector": "^2.0.10",
+        "roave/infection-static-analysis-plugin": "^1.25",
+        "spatie/phpunit-watcher": "^1.23.6",
+        "vimeo/psalm": "^4.30 || ^5.6 || ^6.8.8",
+        "yiisoft/di": "^1.2.1"
     },
     "suggest": {
         "ext-session": "Allows using native PHP sessions"
@@ -70,6 +70,7 @@
     },
     "config": {
         "sort-packages": true,
+        "bump-after-update": "dev",
         "allow-plugins": {
             "infection/extension-installer": true,
             "composer/package-versions-deprecated": true

@@ -4,6 +4,8 @@
 
 - Chg #66: Remove `sid_length` and `sid_bits_per_character` options (@vjik)
 - Chg #67: Mark `SessionException` as final (@vjik)
+- Chg #69: Change PHP constraint in `composer.json` to `8.0 - 8.4` (@vjik)
+- Bug #69: Explicitly mark nullable parameters (@vjik)
 
 ## 2.1.0 May 02, 2024
 
