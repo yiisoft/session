@@ -133,9 +133,15 @@ final class Session implements SessionInterface
     public function getName(): string
     {
         if ($this->isActive()) {
+            /**
+             * @var string Without `name` parameter `session_name()` always returns string.
+             */
             return session_name();
         }
 
+        /**
+         * @var string Without `name` parameter `session_name()` always returns string.
+         */
         return $this->options['name'] ?? session_name();
     }
 
