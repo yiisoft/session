@@ -16,7 +16,7 @@ final class SessionTest extends TestCase
 {
     private ?Session $session = null;
 
-    public function getSession(array $options = [], SessionHandlerInterface $handler = null): Session
+    public function getSession(array $options = [], ?SessionHandlerInterface $handler = null): Session
     {
         if ($this->session === null) {
             $this->session = new Session($options, $handler);

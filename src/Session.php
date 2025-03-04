@@ -37,7 +37,7 @@ final class Session implements SessionInterface
      *
      * @psalm-param SessionOptions $options
      */
-    public function __construct(array $options = [], SessionHandlerInterface $handler = null)
+    public function __construct(array $options = [], ?SessionHandlerInterface $handler = null)
     {
         if ($handler !== null) {
             session_set_save_handler($handler, true);
@@ -94,6 +94,9 @@ final class Session implements SessionInterface
 
         try {
             session_start($this->options);
+            /**
+             * @var string Without `id` parameter `session_id()` always returns string.
+             */
             $this->sessionId = session_id();
         } catch (Throwable $e) {
             throw new SessionException('Failed to start session.', (int)$e->getCode(), $e);
@@ -115,6 +118,9 @@ final class Session implements SessionInterface
         if ($this->isActive()) {
             try {
                 if (session_regenerate_id(true)) {
+                    /**
+                     * @var string Without `id` parameter `session_id()` always returns string.
+                     */
                     $this->sessionId = session_id();
                 }
             } catch (Throwable $e) {
@@ -133,9 +139,15 @@ final class Session implements SessionInterface
     public function getName(): string
     {
         if ($this->isActive()) {
+            /**
+             * @var string Without `name` parameter `session_name()` always returns string.
+             */
             return session_name();
         }
 
+        /**
+         * @var string Without `name` parameter `session_name()` always returns string.
+         */
         return $this->options['name'] ?? session_name();
     }
 
