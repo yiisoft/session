@@ -1,5 +1,9 @@
 # Yii Session Change Log
 
+## 3.0.2 under development
+
+- no changes in this release.
+
 ## 3.0.1 December 17, 2025
 
 - Enh #71: Add PHP 8.5 support (@vjik)
