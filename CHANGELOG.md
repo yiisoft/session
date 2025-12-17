@@ -2,7 +2,7 @@
 
 ## 3.0.1 under development
 
-- no changes in this release.
+- Enh #71: Add PHP 8.5 support (@vjik)
 
 ## 3.0.0 March 04, 2025
 
