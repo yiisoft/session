@@ -12,10 +12,12 @@ on:
 name: rector
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   rector:
+    permissions:
+      contents: write # Required to commit automated Rector and CS fixes.
     uses: yiisoft/actions/.github/workflows/rector.yml@master
     with:
       os: >-
