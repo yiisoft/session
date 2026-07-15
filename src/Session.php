@@ -90,6 +90,8 @@ final class Session implements SessionInterface
 
         if ($this->sessionId !== null) {
             session_id($this->sessionId);
+        } else {
+            session_id(session_create_id());
         }
 
         try {
