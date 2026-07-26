@@ -2,7 +2,7 @@
 
 ## 3.0.2 under development
 
-- no changes in this release.
+- Chg #81: Add explicit use imports for classes and constants (@vjik)
 
 ## 3.0.1 December 17, 2025
 

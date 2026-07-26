@@ -137,7 +137,7 @@ final class SessionMiddlewareTest extends TestCase
     private function setUpSessionMock(
         bool $cookieDomainProvided = true,
         bool $isActive = true,
-        ?string $sessionId = self::CURRENT_SID
+        ?string $sessionId = self::CURRENT_SID,
     ): void {
         $this->sessionMock
             ->expects($this->any())

@@ -20,9 +20,7 @@ final class Flash implements FlashInterface
 
     private ?string $sessionId = null;
 
-    public function __construct(private SessionInterface $session)
-    {
-    }
+    public function __construct(private SessionInterface $session) {}
 
     public function get(string $key)
     {

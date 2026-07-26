@@ -11,6 +11,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use Yiisoft\Cookies\Cookie;
+use Exception;
 
 /**
  * Session middleware handles storing session ID into a response cookie and
@@ -18,9 +19,7 @@ use Yiisoft\Cookies\Cookie;
  */
 final class SessionMiddleware implements MiddlewareInterface
 {
-    public function __construct(private SessionInterface $session)
-    {
-    }
+    public function __construct(private SessionInterface $session) {}
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -42,7 +41,7 @@ final class SessionMiddleware implements MiddlewareInterface
     /**
      * Close session and add/modify response session cookie if necessary.
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function commitSession(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
@@ -83,8 +82,8 @@ final class SessionMiddleware implements MiddlewareInterface
                 ->getUri()
                 ->getScheme() !== 'https') {
             throw new SessionException(
-                '"cookie_secure" is on but connection is not secure. ' .
-                'Either set Session "cookie_secure" option to "0" or make connection secure.'
+                '"cookie_secure" is on but connection is not secure. '
+                . 'Either set Session "cookie_secure" option to "0" or make connection secure.',
             );
         }
 

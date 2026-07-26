@@ -6,6 +6,4 @@ namespace Yiisoft\Session;
 
 use RuntimeException;
 
-final class SessionException extends RuntimeException
-{
-}
+final class SessionException extends RuntimeException {}
