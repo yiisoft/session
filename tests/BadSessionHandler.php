@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session\Tests;
 
-final class BadSessionHandler implements \SessionHandlerInterface
+use ReturnTypeWillChange;
+use SessionHandlerInterface;
+
+use function in_array;
+
+final class BadSessionHandler implements SessionHandlerInterface
 {
-    public function __construct(private array $failAt = [])
-    {
-    }
+    public function __construct(private array $failAt = []) {}
 
     public function close(): bool
     {
@@ -20,7 +23,7 @@ final class BadSessionHandler implements \SessionHandlerInterface
         return $this->getReturnValue('destroy');
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
         return $this->getReturnValue('gc');
@@ -31,7 +34,7 @@ final class BadSessionHandler implements \SessionHandlerInterface
         return $this->getReturnValue('open');
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function read($session_id)
     {
         return '';

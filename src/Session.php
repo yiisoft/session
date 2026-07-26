@@ -7,6 +7,8 @@ namespace Yiisoft\Session;
 use SessionHandlerInterface;
 use Throwable;
 
+use const PHP_SESSION_ACTIVE;
+
 /**
  * Session provides session data management and the related configurations.
  *
@@ -99,7 +101,7 @@ final class Session implements SessionInterface
              */
             $this->sessionId = session_id();
         } catch (Throwable $e) {
-            throw new SessionException('Failed to start session.', (int)$e->getCode(), $e);
+            throw new SessionException('Failed to start session.', (int) $e->getCode(), $e);
         }
     }
 
@@ -124,7 +126,7 @@ final class Session implements SessionInterface
                     $this->sessionId = session_id();
                 }
             } catch (Throwable $e) {
-                throw new SessionException('Failed to regenerate ID.', (int)$e->getCode(), $e);
+                throw new SessionException('Failed to regenerate ID.', (int) $e->getCode(), $e);
             }
         }
     }

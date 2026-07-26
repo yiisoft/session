@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Session\Tests;
 
+use ReturnTypeWillChange;
+use SessionHandlerInterface;
+
 use function array_key_exists;
 
-final class SpySessionHandler implements \SessionHandlerInterface
+final class SpySessionHandler implements SessionHandlerInterface
 {
     private array $calls = [];
 
@@ -27,7 +30,7 @@ final class SpySessionHandler implements \SessionHandlerInterface
         return true;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function gc($maxlifetime)
     {
         $this->record('gc');
@@ -40,7 +43,7 @@ final class SpySessionHandler implements \SessionHandlerInterface
         return true;
     }
 
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function read($session_id)
     {
         $this->record('read');

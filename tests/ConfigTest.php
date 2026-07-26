@@ -12,6 +12,8 @@ use Yiisoft\Session\Flash\FlashInterface;
 use Yiisoft\Session\Session;
 use Yiisoft\Session\SessionInterface;
 
+use function dirname;
+
 final class ConfigTest extends TestCase
 {
     public function testBase(): void
@@ -29,8 +31,8 @@ final class ConfigTest extends TestCase
     {
         return new Container(
             ContainerConfig::create()->withDefinitions(
-                $this->getDiConfig($params)
-            )
+                $this->getDiConfig($params),
+            ),
         );
     }
 

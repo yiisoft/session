@@ -15,11 +15,6 @@ final class FlashTest extends TestCase
      */
     private SessionInterface $session;
 
-    private function getSession(array $contents = []): SessionInterface
-    {
-        return new MockArraySessionStorage($contents);
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -234,5 +229,10 @@ final class FlashTest extends TestCase
             'info' => 'Some message to show',
             'error' => 'Some error message to show',
         ], $flashes);
+    }
+
+    private function getSession(array $contents = []): SessionInterface
+    {
+        return new MockArraySessionStorage($contents);
     }
 }
