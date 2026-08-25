@@ -85,12 +85,15 @@ final class SessionTest extends TestCase
     public function testRegenerateIdOpensInactiveSession(): void
     {
         $session = $this->getSession();
+        $session->open();
+        $id = $session->getId();
+        $session->close();
         self::assertFalse($session->isActive());
 
         $session->regenerateId();
 
         self::assertTrue($session->isActive());
-        self::assertNotNull($session->getId());
+        self::assertNotEquals($id, $session->getId());
     }
 
     public function testDiscard(): void
