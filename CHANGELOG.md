@@ -2,7 +2,8 @@
 
 ## 3.0.2 under development
 
-- Chg #81: Add explicit use imports for classes and constants (@vjik)
+- Enh #81: Add explicit use imports for classes and constants (@vjik)
+- Bug #85: Open session in `Session::regenerateId()` if it is not active yet (@vjik)
 
 ## 3.0.1 December 17, 2025
 

@@ -54,6 +54,7 @@ interface SessionInterface
 
     /**
      * Regenerate session ID keeping data.
+     * Opens the session first if it is not active yet.
      */
     public function regenerateId(): void;
 

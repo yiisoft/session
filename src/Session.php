@@ -117,17 +117,17 @@ final class Session implements SessionInterface
 
     public function regenerateId(): void
     {
-        if ($this->isActive()) {
-            try {
-                if (session_regenerate_id(true)) {
-                    /**
-                     * @var string Without `id` parameter `session_id()` always returns string.
-                     */
-                    $this->sessionId = session_id();
-                }
-            } catch (Throwable $e) {
-                throw new SessionException('Failed to regenerate ID.', (int) $e->getCode(), $e);
+        $this->open();
+
+        try {
+            if (session_regenerate_id(true)) {
+                /**
+                 * @var string Without `id` parameter `session_id()` always returns string.
+                 */
+                $this->sessionId = session_id();
             }
+        } catch (Throwable $e) {
+            throw new SessionException('Failed to regenerate ID.', (int) $e->getCode(), $e);
         }
     }
 
