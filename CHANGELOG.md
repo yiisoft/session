@@ -1,6 +1,6 @@
 # Yii Session Change Log
 
-## 3.0.2 under development
+## 3.0.2 August 26, 2026
 
 - Enh #81: Add explicit use imports for classes and constants (@vjik)
 - Bug #85: Open session in `Session::regenerateId()` if it is not active yet (@vjik)
