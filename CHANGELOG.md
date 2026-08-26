@@ -1,5 +1,9 @@
 # Yii Session Change Log
 
+## 3.0.3 under development
+
+- no changes in this release.
+
 ## 3.0.2 August 26, 2026
 
 - Enh #81: Add explicit use imports for classes and constants (@vjik)
