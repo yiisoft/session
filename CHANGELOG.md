@@ -2,7 +2,8 @@
 
 ## 3.0.3 under development
 
-- no changes in this release.
+- Enh #86: Remove `yiisoft/cookies` dependency (@vjik)
+- Bug #86: `NullSession::getCookieParameters()` now returns proper cookie parameters instead of an empty array (@vjik)
 
 ## 3.0.2 August 26, 2026
 

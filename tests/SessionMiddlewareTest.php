@@ -126,6 +126,98 @@ final class SessionMiddlewareTest extends TestCase
         $this->assertNotSame($response, $result);
     }
 
+    public function testProcessSetsSessionCookieWithAllParameters(): void
+    {
+        $this->setUpSessionMock(true, false, 'new_session_id');
+        $this->setUpRequestMock(true, null);
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+
+        $this->assertMatchesRegularExpression(
+            '~^exampleSessionName=new_session_id; Expires=[A-Za-z0-9,:+ ]+; Max-Age=3600; Domain=exampleDomain; Path=examplePath; Secure; HttpOnly; SameSite=Strict$~',
+            $result->getHeaderLine('Set-Cookie'),
+        );
+    }
+
+    public function testProcessEncodesSessionCookieValue(): void
+    {
+        $this->setUpSessionMock(true, false, 'value with spaces');
+        $this->setUpRequestMock(true, null);
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+
+        $this->assertStringStartsWith('exampleSessionName=value+with+spaces;', $result->getHeaderLine('Set-Cookie'));
+    }
+
+    public function testProcessOmitsExpiresAndMaxAgeWhenLifetimeIsZero(): void
+    {
+        $this->setUpSessionMock(true, false, 'new_session_id', ['lifetime' => 0]);
+        $this->setUpRequestMock(true, null);
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+
+        $this->assertSame(
+            'exampleSessionName=new_session_id; Domain=exampleDomain; Path=examplePath; Secure; HttpOnly; SameSite=Strict',
+            $result->getHeaderLine('Set-Cookie'),
+        );
+    }
+
+    public function testProcessOmitsHttpOnlyWhenDisabled(): void
+    {
+        $this->setUpSessionMock(true, false, 'new_session_id', ['httponly' => false]);
+        $this->setUpRequestMock(true, null);
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+
+        $cookieHeader = $result->getHeaderLine('Set-Cookie');
+        $this->assertStringNotContainsString('HttpOnly', $cookieHeader);
+        $this->assertStringEndsWith('; Secure; SameSite=Strict', $cookieHeader);
+    }
+
+    public function testProcessForcesSecureFlagWhenSameSiteIsNone(): void
+    {
+        $this->setUpSessionMock(true, false, 'new_session_id', ['samesite' => 'None', 'secure' => false]);
+        $this->setUpRequestMock(false, null);
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+
+        $cookieHeader = $result->getHeaderLine('Set-Cookie');
+        $this->assertStringContainsString('; Secure; ', $cookieHeader);
+        $this->assertStringEndsWith('SameSite=None', $cookieHeader);
+    }
+
+    public function testProcessUsesRequestHostAsCookieDomainWhenDomainNotProvided(): void
+    {
+        $this->setUpSessionMock(false, false, 'new_session_id');
+        $this->setUpRequestMock(true, null);
+
+        $this->uriMock
+            ->method('getHost')
+            ->willReturn('example.com');
+
+        $response = new Response();
+        $this->setUpRequestHandlerMock($response);
+
+        $result = $this->sessionMiddleware->process($this->requestMock, $this->requestHandlerMock);
+
+        $this->assertStringContainsString('; Domain=example.com; ', $result->getHeaderLine('Set-Cookie'));
+    }
+
     private function setUpRequestHandlerMock(ResponseInterface $response): void
     {
         $this->requestHandlerMock
@@ -138,6 +230,7 @@ final class SessionMiddlewareTest extends TestCase
         bool $cookieDomainProvided = true,
         bool $isActive = true,
         ?string $sessionId = self::CURRENT_SID,
+        array $cookieParametersOverride = [],
     ): void {
         $this->sessionMock
             ->expects($this->any())
@@ -154,7 +247,7 @@ final class SessionMiddlewareTest extends TestCase
             ->method('getID')
             ->willReturn($sessionId);
 
-        $cookieParams = self::COOKIE_PARAMETERS;
+        $cookieParams = array_merge(self::COOKIE_PARAMETERS, $cookieParametersOverride);
         if (!$cookieDomainProvided) {
             $cookieParams['domain'] = '';
         }

@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace Yiisoft\Session;
 
 use DateInterval;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
-use Yiisoft\Cookies\Cookie;
 use Exception;
+
+use function implode;
+use function urlencode;
 
 /**
  * Session middleware handles storing session ID into a response cookie and
@@ -59,46 +63,60 @@ final class SessionMiddleware implements MiddlewareInterface
             return $response;
         }
 
-        /** @psalm-var array{
-         *      lifetime: int,
-         *      path: string,
-         *      domain: string,
-         *      secure: bool,
-         *      httponly: bool,
-         *      samesite: string
-         * }
-         */
+        return $response->withAddedHeader(
+            'Set-Cookie',
+            $this->buildSessionCookieHeader($request, $currentSessionId),
+        );
+    }
+
+    /**
+     * Build a `Set-Cookie` header value that stores the session ID.
+     *
+     * @throws Exception
+     */
+    private function buildSessionCookieHeader(ServerRequestInterface $request, string $sessionId): string
+    {
         $cookieParameters = $this->session->getCookieParameters();
 
-        $cookieDomain = $cookieParameters['domain'];
-        if (empty($cookieDomain)) {
-            $cookieDomain = $request
-                ->getUri()
-                ->getHost();
+        $domain = $cookieParameters['domain'];
+        if (empty($domain)) {
+            $domain = $request->getUri()->getHost();
         }
 
         $useSecureCookie = $cookieParameters['secure'];
-        if ($useSecureCookie && $request
-                ->getUri()
-                ->getScheme() !== 'https') {
+        if ($useSecureCookie && $request->getUri()->getScheme() !== 'https') {
             throw new SessionException(
-                '"cookie_secure" is on but connection is not secure. '
-                . 'Either set Session "cookie_secure" option to "0" or make connection secure.',
+                '"cookie_secure" is on but connection is not secure. Either set Session "cookie_secure" option to "0" or make connection secure.',
             );
         }
 
-        $sessionCookie = (new Cookie($this->session->getName(), $currentSessionId))
-            ->withPath($cookieParameters['path'])
-            ->withDomain($cookieDomain)
-            ->withHttpOnly($cookieParameters['httponly'])
-            ->withSecure($useSecureCookie)
-            ->withSameSite($cookieParameters['samesite'] ?? Cookie::SAME_SITE_LAX);
+        $sameSite = $cookieParameters['samesite'] ?? 'Lax';
+
+        $cookieParts = [$this->session->getName() . '=' . urlencode($sessionId)];
 
         if ($cookieParameters['lifetime'] > 0) {
-            $sessionCookie = $sessionCookie->withMaxAge(new DateInterval('PT' . $cookieParameters['lifetime'] . 'S'));
+            $expires = (new DateTimeImmutable())->add(
+                new DateInterval('PT' . $cookieParameters['lifetime'] . 'S'),
+            );
+            $cookieParts[] = 'Expires=' . $expires->format(DateTimeInterface::RFC1123);
+            $cookieParts[] = 'Max-Age=' . $cookieParameters['lifetime'];
         }
 
-        return $sessionCookie->addToResponse($response);
+        $cookieParts[] = 'Domain=' . $domain;
+        $cookieParts[] = 'Path=' . $cookieParameters['path'];
+
+        // The "Secure" flag is required for cookies marked as "SameSite=None".
+        if ($useSecureCookie || $sameSite === 'None') {
+            $cookieParts[] = 'Secure';
+        }
+
+        if ($cookieParameters['httponly']) {
+            $cookieParts[] = 'HttpOnly';
+        }
+
+        $cookieParts[] = 'SameSite=' . $sameSite;
+
+        return implode('; ', $cookieParts);
     }
 
     private function getSessionIdFromRequest(ServerRequestInterface $request): ?string
