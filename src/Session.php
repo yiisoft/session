@@ -12,6 +12,8 @@ use const PHP_SESSION_ACTIVE;
 /**
  * Session provides session data management and the related configurations.
  *
+ * @psalm-import-type CookieParameters from SessionInterface
+ *
  * @psalm-type SessionOptions = array{
  *     name?: string,
  * }&array<string,mixed>
@@ -210,6 +212,7 @@ final class Session implements SessionInterface
 
     public function getCookieParameters(): array
     {
+        /** @psalm-var CookieParameters */
         return session_get_cookie_params();
     }
 

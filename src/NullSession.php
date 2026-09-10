@@ -50,7 +50,14 @@ final class NullSession implements SessionInterface
 
     public function getCookieParameters(): array
     {
-        return [];
+        return [
+            'lifetime' => 0,
+            'path' => '/',
+            'domain' => '',
+            'secure' => false,
+            'httponly' => false,
+            'samesite' => '',
+        ];
     }
 
     public function getId(): ?string

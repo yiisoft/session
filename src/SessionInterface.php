@@ -6,6 +6,15 @@ namespace Yiisoft\Session;
 
 /**
  * Session interface defines session data management API.
+ *
+ * @psalm-type CookieParameters = array{
+ *     lifetime: int,
+ *     path: string,
+ *     domain: string,
+ *     secure: bool,
+ *     httponly: bool,
+ *     samesite: string
+ * }
  */
 interface SessionInterface
 {
@@ -109,6 +118,8 @@ interface SessionInterface
 
     /**
      * @return array Parameters for a session cookie.
+     *
+     * @psalm-return CookieParameters
      */
     public function getCookieParameters(): array;
 }
