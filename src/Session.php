@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Session;
 
 use SessionHandlerInterface;
+use SessionIdInterface;
 use Throwable;
 
 use const PHP_SESSION_ACTIVE;
@@ -38,10 +39,14 @@ final class Session implements SessionInterface
     /**
      * @param array $options Session options. See {@link https://www.php.net/manual/en/session.configuration.php}.
      * @param SessionHandlerInterface|null $handler Session handler. If not specified, default PHP handler is used.
+     * @param SessionIdInterface|null $idCreator Session id creator.
      *
      * @psalm-param SessionOptions $options
      */
-    public function __construct(array $options = [], ?SessionHandlerInterface $handler = null)
+    public function __construct(
+        array                       $options = [],
+        ?SessionHandlerInterface    $handler = null,
+        private ?SessionIdInterface $idCreator = null)
     {
         if ($handler !== null) {
             session_set_save_handler($handler, true);
@@ -94,6 +99,8 @@ final class Session implements SessionInterface
 
         if ($this->sessionId !== null) {
             session_id($this->sessionId);
+        } else if ($this->idCreator !== null) {
+            session_id($this->idCreator->create_sid());
         }
 
         try {

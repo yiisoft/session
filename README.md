@@ -165,6 +165,17 @@ $session = new \Yiisoft\Session\Session([], $handler);
 
 Custom storage must implement `\SessionHandlerInterface`.
 
+## Custom session ID
+
+When using `Yiisoft\Session\Session` as session component, you can provide your own implementation of the session ID creator:
+
+```php
+$idCreator = new MySessionId();
+$session = new \Yiisoft\Session\Session([], null, $idCreator);
+```
+
+The custom session ID creator must implement the `\SessionIdInterface`.
+
 ## Documentation
 
 - [Internals](docs/internals.md)

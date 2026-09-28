@@ -15,6 +15,7 @@ return [
         '__construct()' => [
             $params['yiisoft/session']['session']['options'],
             $params['yiisoft/session']['session']['handler'],
+            $params['yiisoft/session']['session']['idCreator'],
         ],
         'reset' => function () {
             $this->sessionId = null;
