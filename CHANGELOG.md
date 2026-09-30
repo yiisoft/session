@@ -1,5 +1,9 @@
 # Yii Session Change Log
 
+## 3.0.4 under development
+
+- no changes in this release.
+
 ## 3.0.3 September 30, 2026
 
 - Enh #86: Remove `yiisoft/cookies` dependency (@vjik)
