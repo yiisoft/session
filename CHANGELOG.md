@@ -1,10 +1,10 @@
 # Yii Session Change Log
 
-## 3.0.3 under development
+## 3.0.3 September 30, 2026
 
 - Enh #86: Remove `yiisoft/cookies` dependency (@vjik)
-- Bug #86: `NullSession::getCookieParameters()` now returns proper cookie parameters instead of an empty array (@vjik)
 - Bug #25: Fix reusing the previous session ID in `Session::open()` in long-running workers (@klsoft-web)
+- Bug #86: `NullSession::getCookieParameters()` now returns proper cookie parameters instead of an empty array (@vjik)
 
 ## 3.0.2 August 26, 2026
 
